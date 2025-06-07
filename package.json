@@ -1,0 +1,9 @@
+{
+  "name": "song-quiz",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
