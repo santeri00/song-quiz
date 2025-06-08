@@ -15,4 +15,15 @@ app.get('/api/artist/:id/albums', async (req, res) => {
   }
 });
 
+app.get('/api/:albumId/tracks', async (req, res) => {
+  try {
+    const albumId = req.params.albumId;
+    const response = await fetch(`https://api.deezer.com/album/${albumId}/tracks`)
+    const data = await response.json()
+    res.json(data)
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch Deezer data' });
+  }
+})
+
 app.listen(5000, () => console.log('Proxy server running on http://localhost:5000'));

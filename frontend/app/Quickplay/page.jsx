@@ -8,6 +8,10 @@ import mocktracklist from '../mocktracklist';
 function Quickplay() {
     const [albums, setAlbums] = useState([])
     const [currentSongUrl, setCurrentSongUrl] = useState(null)
+    const [selectedAlbumsIds, setSelectedAlbumsIds] = useState([])
+
+    const [trackList, setTrackList] = useState([])
+
     const audioRef = useRef(null)
     const ARTIST_ID_TEST = 4495513
     
@@ -30,15 +34,44 @@ function Quickplay() {
         console.error("error getting album data", error)
       }
     }
+
+    const fetchTrackList = async (id) => {
+        try {
+          const res  = await fetch(`http://localhost:5000/api/${id}/tracks`)
+          const trackdata = await res.json()
+          console.log("trackdata: ", trackdata.data)
+          return trackdata.data
+        } catch (err) { 
+          console.error("error in fetchTrackList", err)
+          return []
+        }
+        
+    }
+   
+
+    const getTracksFromSelectedAlbums = async () => {
+      try {
+        const trackLists = await Promise.all(
+          selectedAlbumsIds.map(id => fetchTrackList(id))
+        );
+        const tracks = trackLists.flat()
+        console.log(tracks)
+        setTrackList(tracks)
+        getRandomTrack(trackList)
+      } catch (err) {
+        console.error("Error getting tracks from albums", err);
+      }
+     
+    }
     
-    const getRandomTrack = () => {
-        const randomTrackData = mocktracklist.data[Math.floor(Math.random() * mocktracklist.data.length)]
+    const getRandomTrack = (tracklist) => {
+        const randomTrackData = tracklist[Math.floor(Math.random() * tracklist.length)]
         console.log(randomTrackData.title)
         console.log(randomTrackData.preview)
         setCurrentSongUrl(randomTrackData.preview)
-
-        
     }
+   
+    //when song url changes resetes the audio player
     useEffect(() => {
         if (audioRef.current && currentSongUrl) {
       audioRef.current.load();       // Reset audio element
@@ -53,19 +86,39 @@ function Quickplay() {
         }
     }
 
-    const List = ({items}) => {
-        return (
-            <div className='flex justify-center items-center w-full'>
-                <div className='flex flex-row flex-wrap'>
+
+
+    const List = ({ items, selectedIds, onSelect }) => {
+          return (
+            <div className='flex justify-center items-center w-full p-3'>
+                <div className='flex flex-row flex-wrap gap-5'>
                 {items.map((item) => (
-                    <div key={item.id}
-                        onClick={() => getRandomTrack()}
-                        className="w-32 flex flex-col items-center text-center"
-                    >
-                        <img src={item.cover_medium} alt={item.title} className='w-28 h-28'/>
-                        <p className='text-wrap w-28'>{item.title}</p>
-                    </div>
+                    <label key={item.id}
+                      
+                        className="relative flex flex-col items-center text-center box-border border p-5
+                          bg-neutral-900 hover:text-teal-500  has-checked:text-teal-500
+                          cursor-pointer rounded-sm transition ease-in duration-200 select-none"
+
+                          
+                    > 
+                      <div>
+                        <img src={item.cover_medium} alt={item.title} className='h-36 w-36'/>
+                      </div>
+                        
+                        <p className='text-wrap w-28 pb-4'>{item.title}</p>
+                        <input 
+                          type='checkbox'
+                          className='absolute bottom-3 right-5 cursor-pointer appearance-none rounded-full w-6 h-6 border checked:bg-green-500'
+                           id={`checkbox-${item.id}`}        // add id
+                           
+                          checked={selectedIds.includes(item.id)}
+                          onChange={() => onSelect(item.id)}
+                        />
+                    </label>
                 ))}
+                </div>
+                <div className="mt-5 text-white">
+                  Selected IDs: {JSON.stringify(selectedIds)}
                 </div>
             </div>
         )
@@ -74,26 +127,55 @@ function Quickplay() {
 
 
   return (
-    <div>
+    <div className=''>
         <h1>Select albums from list to play</h1>
-        <List items={albums} />
-        {currentSongUrl && (
-            <>
-            <audio
-                ref={audioRef}
-                autoPlay 
-                //onLoadedData={handleAudioLoad}
-                controls
-                //crossOrigin="anonymous"
-            > 
-                <source src={currentSongUrl} type="audio/mpeg"/>
-            </audio>
-            <button onClick={pauseAudio}>Stop</button>
-            </>
+        <div className=''>
+          <List 
+          items={albums} 
+          selectedIds={selectedAlbumsIds}
+          onSelect={(id) => { 
+          const newSelected = selectedAlbumsIds.includes(id)
+          //removes id from list
+          ? selectedAlbumsIds.filter((selectedId) => selectedId !== id)
+          : [...selectedAlbumsIds, id];
+
+          setSelectedAlbumsIds(newSelected);
+          }}
+          
+        />
+
+          {currentSongUrl && (
+              <>
+              <audio
+                  ref={audioRef}
+                  autoPlay 
+                  controls
+              > 
+                  <source src={currentSongUrl} type="audio/mpeg"/>
+              </audio>
+              <button onClick={pauseAudio}>Stop</button>
+              </>
+              
+              )}
+        </div>
+        <div className='flex justify-center mt-20'>
+         <button
+          className='cursor-pointer border rounded-sm bg-neutral-800 p-3 hover:text-teal-500 transition ease-in-out duration 150'
+         >
+              Confirm selection
+         </button>
+
+          <button
+          className='cursor-pointer border rounded-sm bg-neutral-800 p-3 hover:text-teal-500 transition ease-in-out duration 150'
+          onClick={getTracksFromSelectedAlbums}
+         >
+              get tracklist
+         </button>
             
-            )}
+         
+        </div>
     </div>
   )
 }
-
+ 
 export default Quickplay
