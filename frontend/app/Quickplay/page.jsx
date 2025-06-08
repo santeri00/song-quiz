@@ -86,20 +86,33 @@ function Quickplay() {
         }
     }
 
+    const allSelected = albums.length === selectedAlbumsIds.length && albums.every(album => selectedAlbumsIds.includes(album.id))
+
+    const toggleAll = () => {
+      if (allSelected) {
+        setSelectedAlbumsIds([])
+      } else {
+        setSelectedAlbumsIds(albums.map(album => album.id))
+      }
+    }
+    console.log(allSelected)
 
 
     const List = ({ items, selectedIds, onSelect }) => {
           return (
+            
             <div className='flex justify-center items-center w-full p-3'>
+              <button className='cursor-pointer border rounded-sm bg-neutral-800 p-3 hover:text-teal-500 transition ease-in-out duration 150'
+                onClick={toggleAll}
+              >
+              select all
+            </button>
                 <div className='flex flex-row flex-wrap gap-5'>
                 {items.map((item) => (
                     <label key={item.id}
-                      
                         className="relative flex flex-col items-center text-center box-border border p-5
                           bg-neutral-900 hover:text-teal-500  has-checked:text-teal-500
                           cursor-pointer rounded-sm transition ease-in duration-200 select-none"
-
-                          
                     > 
                       <div>
                         <img src={item.cover_medium} alt={item.title} className='h-36 w-36'/>
@@ -109,7 +122,7 @@ function Quickplay() {
                         <input 
                           type='checkbox'
                           className='absolute bottom-3 right-5 cursor-pointer appearance-none rounded-full w-6 h-6 border checked:bg-green-500'
-                           id={`checkbox-${item.id}`}        // add id
+                           id={`checkbox-${item.id}`} 
                            
                           checked={selectedIds.includes(item.id)}
                           onChange={() => onSelect(item.id)}
