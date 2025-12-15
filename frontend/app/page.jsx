@@ -6,8 +6,6 @@ import { Play } from 'lucide-react';
 import { useState } from "react";
 import getSong from "./api/preview";
 
-var SpotifyWebApi = require('spotify-web-api-node');
-var spotifyApi = new SpotifyWebApi();
 export default function Home() {
   const router = useRouter();
 
@@ -16,17 +14,17 @@ export default function Home() {
   const [trackIds, setTrackIds] = useState([])
   const [token, setToken] = useState("")
   const [url, setUrl] = useState("")
-   
-  
-  
- 
+
+
+
+
   const handleMouseDown = (button_num) => {
     if (button_num === 2) {
       setIsScaled2(true)
     } else {
       setIsScaled(true); // Scale up when the mouse is pressed down
     }
-    
+
   };
 
   const handleMouseUp = (button_num) => {
@@ -38,10 +36,10 @@ export default function Home() {
   };
 
   const handleClick = async() => {
-    
+
   }
   const getPreview = async() => {
-    
+
   }
 
 
@@ -51,7 +49,7 @@ export default function Home() {
         <h1 className="text-2xl">Welcome to Song quiz!</h1>
         <p className="opacity-60 text-center max-w-lg">Press play to create a lobby where you can challenge your friends or yourself trying to guess the song name or artist!</p>
           <div className="flex flex-row gap-5">
-              <button 
+              <button
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
@@ -59,7 +57,7 @@ export default function Home() {
               Play <Play className=""/>
             </button>
 
-            <button 
+            <button
             onMouseDown={() => handleMouseDown(2)}
             onMouseUp={() => handleMouseUp(2)}
             onMouseLeave={() => handleMouseUp(2)}
@@ -68,8 +66,8 @@ export default function Home() {
               Quickplay <Play className=""/>
             </button>
           </div>
-          
-       
+
+
       </section>
     </main>
   );
