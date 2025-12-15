@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from "next/link";
 import Image from "next/image";
-import { PlusCircle } from 'lucide-react'; 
+import { PlusCircle } from 'lucide-react';
 
 function Navbar() {
   return (
@@ -13,7 +13,7 @@ function Navbar() {
                 width={70}
                 height={70}
             />
-        </Link>
+          </Link>
 
         <Link href="/lobby" className='flex  items-center text-lg hover:text-teal-500 transition ease-in-out duration-200'>
         <span className='flex-row flex items-center gap-x-1'>
@@ -21,7 +21,7 @@ function Navbar() {
         <PlusCircle size={20}/>
 
         </span>
-          
+
         </Link>
     </nav>
   )
