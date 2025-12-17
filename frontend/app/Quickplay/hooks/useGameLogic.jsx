@@ -4,7 +4,7 @@ import mockalbumdata from '../../mockalbumdata'
 import mocktracklist from '../../mocktracklist';
 
 export function useGameLogic() {
-  const [gameState, setGameState] = useState('select'); // 'selection', 'play', 'end'
+  const [gameState, setGameState] = useState('play'); // 'selection', 'play', 'end'
   // selection states
   const [albums, setAlbums] = useState([])
   const [currentSongUrl, setCurrentSongUrl] = useState(null)
@@ -43,7 +43,7 @@ export function useGameLogic() {
 
   const fetchTrackList = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/${id}/tracks`)
+      const res = await fetch(`http://localhost:5000/api/deezer/${id}/tracks`)
       const trackdata = await res.json()
       console.log("trackdata: ", trackdata.data)
       return trackdata.data
@@ -63,7 +63,7 @@ export function useGameLogic() {
       const tracks = trackLists.flat()
       console.log("tracks:", tracks)
       setTrackList(tracks)
-      getRandomTrack(tracks)
+      // getRandomTrack(tracks)
     } catch (err) {
       console.error("Error getting tracks from albums", err);
     }
@@ -109,6 +109,15 @@ export function useGameLogic() {
     }
   }
 
+  const handleStartGame = () => {
+    setGameState('play');
+    getTracksFromSelectedAlbums();
+  }
+
+  const handleEndgame = () => {
+    setGameState('end');
+  }
+
   return {
     gameState,
     setGameState,
@@ -130,7 +139,7 @@ export function useGameLogic() {
     setCurrentTrackIndex,
     score,
     setScore,
-
+    handleStartGame,
 
   }
 }

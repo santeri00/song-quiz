@@ -1,10 +1,14 @@
 import React from "react";
 import List from '../../components/TrackListCards';
+import Navbar from "../../components/Navbar";
+export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setSelectedAlbumsIds,
+  currentSongUrl, audioRef, getTracksFromSelectedAlbums, pauseAudio, handleStartGame }) {
 
-export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setSelectedAlbumsIds, currentSongUrl, audioRef, getTracksFromSelectedAlbums, pauseAudio }) {
+
 
   return (
     <div className=''>
+      <Navbar />
       {/* select state */}
       <h1>Select albums from list to play</h1>
       <div className=''>
@@ -18,6 +22,7 @@ export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setS
               : [...selectedAlbumsIds, id];
 
             setSelectedAlbumsIds(newSelected);
+            
           }}
           toggleAll={toggleAll}
 
@@ -37,11 +42,12 @@ export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setS
 
         )}
       </div>
-      <div className='flex justify-center mt-20'>
+      <div className='flex justify-center mt-20 gap-5'>
         <button
           className='cursor-pointer border rounded-sm bg-neutral-800 p-3 hover:text-teal-500 transition ease-in-out duration 150'
+          onClick={handleStartGame}
         >
-          Confirm selection
+          Start Game
         </button>
 
         <button

@@ -1,15 +1,17 @@
 import React from "react";
 import { useState, useEffect, useRef } from 'react';
-
+import PlayNavbar from "./PlayNavbar";
 function PlayState({ trackList }) {
-
+  console.log(trackList);
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {playState === 'loading' && <p>Loading...</p>}
-      {playState === 'playing' && <p>Playing</p>}
-      {playState === 'paused' && <p>Paused</p>}
-      {playState === 'stopped' && <p>Stopped</p>}
+      <PlayNavbar />
+      {/* <ul>
+        {trackList.map((track) => {
+
+        })}
+      </ul> */}
     </div>
   );
 }

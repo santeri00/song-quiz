@@ -17,10 +17,13 @@ function Quickplay() {
     setSelectedAlbumsIds,
     audioRef,
     getTracksFromSelectedAlbums,
-    pauseAudio
+    pauseAudio,
+    handleStartGame,
+    trackList,
+    setTrackList,
   } = useGameLogic();
 
-  
+
 
   const renderState = () => {
     switch (gameState) {
@@ -33,9 +36,10 @@ function Quickplay() {
           audioRef={audioRef}
           getTracksFromSelectedAlbums={getTracksFromSelectedAlbums}
           pauseAudio={pauseAudio}
+          handleStartGame={handleStartGame}
         />;
       case 'play':
-        return <PlayState currentSongUrl={currentSongUrl} />;
+        return <PlayState trackList={trackList} />;
       case 'finish':
         return <FinishState />;
       default:
