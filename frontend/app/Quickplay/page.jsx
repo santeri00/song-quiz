@@ -1,9 +1,6 @@
 'use client'
 import React from 'react'
 import { useState, useEffect, useRef } from 'react';
-
-import List from '../components/TrackListCards';
-
 import SelectState from './components/SelectState';
 import PlayState from './components/PlayState';
 import FinishState from './components/FinishState';
@@ -23,6 +20,7 @@ function Quickplay() {
     pauseAudio
   } = useGameLogic();
 
+  
 
   const renderState = () => {
     switch (gameState) {

@@ -71,6 +71,10 @@ export function useGameLogic() {
   }
 
   const getRandomTrack = (tracklist) => {
+    if (tracklist.length === 0) {
+      console.warn("Tracklist is empty, cannot select random track.");
+      return;
+    }
     const randomTrackData = tracklist[Math.floor(Math.random() * tracklist.length)]
     console.log(randomTrackData.type)
     console.log(randomTrackData.preview)
