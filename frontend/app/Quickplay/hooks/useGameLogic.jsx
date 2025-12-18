@@ -4,7 +4,7 @@ import mockalbumdata from '../../mockalbumdata'
 import mocktracklist from '../../mocktracklist';
 
 export function useGameLogic() {
-  const [gameState, setGameState] = useState('play'); // 'selection', 'play', 'end'
+  const [gameState, setGameState] = useState('select'); // 'select', 'play', 'end'
   // selection states
   const [albums, setAlbums] = useState([])
   const [currentSongUrl, setCurrentSongUrl] = useState(null)
@@ -62,7 +62,14 @@ export function useGameLogic() {
       );
       const tracks = trackLists.flat()
       console.log("tracks:", tracks)
-      setTrackList(tracks)
+      const shuffled = tracks;
+
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      const tenTrackList = shuffled.slice(0, 10);
+      setTrackList(tenTrackList)
       // getRandomTrack(tracks)
     } catch (err) {
       console.error("Error getting tracks from albums", err);
@@ -76,10 +83,7 @@ export function useGameLogic() {
       return;
     }
     const randomTrackData = tracklist[Math.floor(Math.random() * tracklist.length)]
-    console.log(randomTrackData.type)
-    console.log(randomTrackData.preview)
     setCurrentSongUrl(randomTrackData.preview)
-    console.log("current song:", randomTrackData.title)
   }
 
   //when song url changes resets the audio player
