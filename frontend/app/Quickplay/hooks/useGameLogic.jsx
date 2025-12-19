@@ -2,9 +2,9 @@ import React from "react";
 import { useState, useEffect, useRef } from 'react';
 import mockalbumdata from '../../mockalbumdata'
 import mocktracklist from '../../mocktracklist';
-
+import { mockTracks } from "../mocks/mockTenTracks";
 export function useGameLogic() {
-  const [gameState, setGameState] = useState('select'); // 'select', 'play', 'end'
+  const [gameState, setGameState] = useState('play'); // 'select', 'play', 'end'
   // selection states
   const [albums, setAlbums] = useState([])
   const [currentSongUrl, setCurrentSongUrl] = useState(null)
