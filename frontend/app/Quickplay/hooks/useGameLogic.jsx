@@ -3,20 +3,20 @@ import { useState, useEffect, useRef } from 'react';
 import mockalbumdata from '../../mockalbumdata'
 import mocktracklist from '../../mocktracklist';
 import { mockTracks } from "../mocks/mockTenTracks";
+
 export function useGameLogic() {
-  const [gameState, setGameState] = useState('play'); // 'select', 'play', 'end'
+  const [gameState, setGameState] = useState('select'); // 'select', 'play', 'end'
   // selection states
   const [albums, setAlbums] = useState([])
   const [currentSongUrl, setCurrentSongUrl] = useState(null)
   const [selectedAlbumsIds, setSelectedAlbumsIds] = useState([])
 
   // play states
-  const audioRef = useRef(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [trackList, setTrackList] = useState([]);
-
-
+  const [rounds, setRounds] = useState(10);
+  const [allTracks, setAllTracks] = useState([]);
 
   const ARTIST_ID_TEST = 4495513
 
@@ -26,6 +26,7 @@ export function useGameLogic() {
     );
     setAlbums(albums)
   }, [])
+
 
   const fetchAlbums = async () => {
     try {
@@ -62,6 +63,7 @@ export function useGameLogic() {
       );
       const tracks = trackLists.flat()
       console.log("tracks:", tracks)
+      setAllTracks(tracks);
       const shuffled = tracks;
 
       for (let i = shuffled.length - 1; i > 0; i--) {
@@ -86,16 +88,6 @@ export function useGameLogic() {
     setCurrentSongUrl(randomTrackData.preview)
   }
 
-  //when song url changes resets the audio player
-  useEffect(() => {
-    if (audioRef.current && currentSongUrl) {
-      audioRef.current.load();       // Reset audio element
-      audioRef.current.play().catch((err) => {
-        console.warn("Autoplay failed:", err);
-      });
-
-    }
-  }, [currentSongUrl])
 
   const pauseAudio = () => {
     if (audioRef.current) {
@@ -138,12 +130,13 @@ export function useGameLogic() {
     getTracksFromSelectedAlbums,
     pauseAudio,
     // play states
-    audioRef,
     currentTrackIndex,
     setCurrentTrackIndex,
     score,
     setScore,
     handleStartGame,
-
+    rounds,
+    setRounds,
+    allTracks,
   }
 }

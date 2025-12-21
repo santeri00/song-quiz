@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import SelectState from './components/SelectState';
 import PlayState from './components/PlayState';
 import FinishState from './components/FinishState';
-
 import { useGameLogic } from './hooks/useGameLogic';
+import Audio from './components/Audio';
 
 function Quickplay() {
   const {
@@ -21,6 +21,15 @@ function Quickplay() {
     handleStartGame,
     trackList,
     setTrackList,
+    rounds,
+    setRounds,
+    currentTrackIndex,
+    setCurrentTrackIndex,
+    score,
+    setScore,
+    allTracks,
+    setGameState,
+
   } = useGameLogic();
 
 
@@ -39,7 +48,17 @@ function Quickplay() {
           handleStartGame={handleStartGame}
         />;
       case 'play':
-        return <PlayState trackList={trackList} />;
+        return <PlayState
+          trackList={trackList}
+          rounds={rounds}
+          setRounds={setRounds}
+          currentTrackIndex={currentTrackIndex}
+          setCurrentTrackIndex={setCurrentTrackIndex}
+          score={score}
+          setScore={setScore}
+          allTracks={allTracks}
+          setGameState={setGameState}
+        />;
       case 'finish':
         return <FinishState />;
       default:

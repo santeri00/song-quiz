@@ -1,9 +1,8 @@
 import React from 'react'
 import Link from "next/link";
 import Image from "next/image";
-import { PlusCircle } from 'lucide-react';
 
-export default function PlayNavbar({ }) {
+export default function PlayNavbar({ currentTrackIndex, rounds }) {
 
   return (
     <nav className='relative p-2 w-screen flex flex-row items-center gap-x-15 border-b border-teal-900'>
@@ -23,7 +22,7 @@ export default function PlayNavbar({ }) {
        bg-neutral-900 flex justify-center items-center z-10 [clip-path:polygon(0_0,100%_0,88%_100%,12%_100%)]
        '>
         <div className="font-bold text-2xl">
-          Round 1
+          Round {currentTrackIndex + 1} / {rounds}
         </div>
       </div>
 

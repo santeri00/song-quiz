@@ -3,9 +3,6 @@ import List from '../../components/TrackListCards';
 import Navbar from "../../components/Navbar";
 export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setSelectedAlbumsIds,
   currentSongUrl, audioRef, getTracksFromSelectedAlbums, pauseAudio, handleStartGame }) {
-
-
-
   return (
     <div className=''>
       <Navbar />
@@ -22,7 +19,7 @@ export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setS
               : [...selectedAlbumsIds, id];
 
             setSelectedAlbumsIds(newSelected);
-            
+
           }}
           toggleAll={toggleAll}
 

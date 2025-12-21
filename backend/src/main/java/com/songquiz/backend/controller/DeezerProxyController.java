@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.songquiz.backend.helper.JsonNodeService;
+
 import reactor.core.publisher.Mono;
 import tools.jackson.databind.JsonNode;
 
@@ -27,12 +29,12 @@ public class DeezerProxyController {
     return webClient.get()
         .uri("/album/{albumId}/tracks", albumId)
         .retrieve()
-        .bodyToMono(
-            JsonNode.class)
+        .bodyToMono(JsonNode.class)
+        .map(JsonNodeService::mapTracks)
         .onErrorResume(e -> {
           return Mono.error(new RuntimeException("Deezer fetch failed"));
         })
-        .map(responseBody -> ResponseEntity.ok(responseBody));
+        .map(ResponseEntity::ok);
   }
 
   @GetMapping("/artist/{artistId}/albums")
