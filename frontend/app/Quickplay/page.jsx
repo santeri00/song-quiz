@@ -5,7 +5,6 @@ import SelectState from './components/SelectState';
 import PlayState from './components/PlayState';
 import FinishState from './components/FinishState';
 import { useGameLogic } from './hooks/useGameLogic';
-import Audio from './components/Audio';
 
 function Quickplay() {
   const {
@@ -29,6 +28,7 @@ function Quickplay() {
     setScore,
     allTracks,
     setGameState,
+    singles,
 
   } = useGameLogic();
 
@@ -46,6 +46,7 @@ function Quickplay() {
           getTracksFromSelectedAlbums={getTracksFromSelectedAlbums}
           pauseAudio={pauseAudio}
           handleStartGame={handleStartGame}
+          singles={singles}
         />;
       case 'play':
         return <PlayState

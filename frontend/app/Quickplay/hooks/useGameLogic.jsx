@@ -7,9 +7,10 @@ import { mockTracks } from "../mocks/mockTenTracks";
 export function useGameLogic() {
   const [gameState, setGameState] = useState('select'); // 'select', 'play', 'end'
   // selection states
-  const [albums, setAlbums] = useState([])
-  const [currentSongUrl, setCurrentSongUrl] = useState(null)
-  const [selectedAlbumsIds, setSelectedAlbumsIds] = useState([])
+  const [albums, setAlbums] = useState([]);
+  const [singles, setSingles] = useState([]);
+  const [currentSongUrl, setCurrentSongUrl] = useState(null);
+  const [selectedAlbumsIds, setSelectedAlbumsIds] = useState([]);
 
   // play states
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
@@ -21,20 +22,23 @@ export function useGameLogic() {
   const ARTIST_ID_TEST = 4495513
 
   useEffect(() => {
-    const albums = mockalbumdata.data.filter(
-      album => album.record_type === "album" && album.explicit_lyrics === true
-    );
-    setAlbums(albums)
+    // const albums = mockalbumdata.data.filter(
+    //   album => album.record_type === "album" && album.explicit_lyrics === true
+    // );
+    // setAlbums(albums)
+    fetchAlbums();
   }, [])
 
 
   const fetchAlbums = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/artist/${ARTIST_ID_TEST}/albums`)
+      const res = await fetch(`http://localhost:5000/api/deezer/artist/${ARTIST_ID_TEST}/albums`)
       const data = await res.json()
       console.log(`albums `, data.data)
       const albumData = data.data
+      const singles = albumData.filter((album) => album.record_type === "single" && album.explicit_lyrics === true)
       const albums = albumData.filter(album => album.record_type === "album" && album.explicit_lyrics === true)
+      setSingles(singles)
       setAlbums(albums)
 
     } catch (error) {
@@ -43,11 +47,12 @@ export function useGameLogic() {
   }
 
   const fetchTrackList = async (id) => {
+    console.log("fetching with id:", id)
     try {
       const res = await fetch(`http://localhost:5000/api/deezer/${id}/tracks`)
       const trackdata = await res.json()
       console.log("trackdata: ", trackdata.data)
-      return trackdata.data
+      return trackdata
     } catch (err) {
       console.error("error in fetchTrackList", err)
       return []
@@ -61,6 +66,7 @@ export function useGameLogic() {
       const trackLists = await Promise.all(
         selectedAlbumsIds.map(id => fetchTrackList(id))
       );
+      console.log(trackLists)
       const tracks = trackLists.flat()
       console.log("tracks:", tracks)
       setAllTracks(tracks);
@@ -129,6 +135,8 @@ export function useGameLogic() {
     toggleAll,
     getTracksFromSelectedAlbums,
     pauseAudio,
+    singles,
+    setSingles,
     // play states
     currentTrackIndex,
     setCurrentTrackIndex,
@@ -138,5 +146,7 @@ export function useGameLogic() {
     rounds,
     setRounds,
     allTracks,
+    setAllTracks,
+
   }
 }

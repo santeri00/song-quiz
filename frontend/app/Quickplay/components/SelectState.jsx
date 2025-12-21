@@ -2,7 +2,9 @@ import React from "react";
 import List from '../../components/TrackListCards';
 import Navbar from "../../components/Navbar";
 export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setSelectedAlbumsIds,
-  currentSongUrl, audioRef, getTracksFromSelectedAlbums, pauseAudio, handleStartGame }) {
+  currentSongUrl, audioRef, getTracksFromSelectedAlbums, pauseAudio, handleStartGame, singles }) {
+
+
   return (
     <div className=''>
       <Navbar />
@@ -11,7 +13,9 @@ export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setS
       <div className=''>
         <List
           items={albums}
+          singles={singles}
           selectedIds={selectedAlbumsIds}
+          setSelectedAlbumIds={setSelectedAlbumsIds}
           onSelect={(id) => {
             const newSelected = selectedAlbumsIds.includes(id)
               //removes id from list
