@@ -50,4 +50,9 @@ public class DeezerProxyController {
         .map(responseBody -> ResponseEntity.ok(responseBody));
   }
 
+  @GetMapping("/test/500")
+  public Mono<String> simulate500() {
+    throw new RuntimeException("Simulated internal server error");
+  }
+
 }

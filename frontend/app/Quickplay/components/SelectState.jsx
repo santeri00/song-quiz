@@ -9,40 +9,39 @@ export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setS
     <div className=''>
       <Navbar />
       {/* select state */}
-      <h1>Select albums from list to play</h1>
-      <div className=''>
-        <List
-          items={albums}
-          singles={singles}
-          selectedIds={selectedAlbumsIds}
-          setSelectedAlbumIds={setSelectedAlbumsIds}
-          onSelect={(id) => {
-            const newSelected = selectedAlbumsIds.includes(id)
-              //removes id from list
-              ? selectedAlbumsIds.filter((selectedId) => selectedId !== id)
-              : [...selectedAlbumsIds, id];
+      {albums?.length > 0 ? (
+        <>
+          <h1>Select albums from list to play</h1>
+          <div className=''>
+            <List
+              items={albums}
+              singles={singles}
+              selectedIds={selectedAlbumsIds}
+              setSelectedAlbumIds={setSelectedAlbumsIds}
+              onSelect={(id) => {
+                const newSelected = selectedAlbumsIds.includes(id)
+                  //removes id from list
+                  ? selectedAlbumsIds.filter((selectedId) => selectedId !== id)
+                  : [...selectedAlbumsIds, id];
 
-            setSelectedAlbumsIds(newSelected);
+                setSelectedAlbumsIds(newSelected);
 
-          }}
-          toggleAll={toggleAll}
+              }}
+              toggleAll={toggleAll}
 
-        />
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex justify-center items-center h-64">
+            <p>Loading albums...</p>
+          </div>
 
-        {currentSongUrl && (
-          <>
-            <audio
-              ref={audioRef}
-              autoPlay
-              controls
-            >
-              <source src={currentSongUrl} type="audio/mpeg" />
-            </audio>
-            <button onClick={pauseAudio}>Stop</button>
-          </>
+        </>
+      )}
 
-        )}
-      </div>
+
       <div className='flex justify-center mt-20 gap-5'>
         <button
           className='cursor-pointer border rounded-sm bg-neutral-800 p-3 hover:text-teal-500 transition ease-in-out duration 150'

@@ -14,10 +14,13 @@ function PlayState({ trackList, rounds, setRounds,
   const [answers, setAnswers] = useState([])
   const [hasAnswered, setHasAnswered] = useState(false)
 
-
-  const tracks = mockTracks; // change later
-  const pool = mockManyTracks;  // change later
+  console.log("allTracks in PlayState:", allTracks);
+  console.log("trackList in PlayState:", trackList);
+  const tracks = trackList; // change later
+  const pool = allTracks;  // change later
   const audioRef = useRef(null);
+  console.log("tracks in PlayState:", tracks);
+
 
 
   const generateRound = (roundIdx) => {
@@ -57,7 +60,7 @@ function PlayState({ trackList, rounds, setRounds,
       });
     }
 
-  }, [currentTrackIndex])
+  }, [currentTrackIndex, tracks])
 
   const handleAnswer = (track) => {
     if (hasAnswered) return;
@@ -76,7 +79,7 @@ function PlayState({ trackList, rounds, setRounds,
   }
 
 
-  if (tracks.length === 0) {
+  if (trackList.length === 0) {
     return (
       <p className="flex justify-center items-center h-screen">loading...</p>
     )
