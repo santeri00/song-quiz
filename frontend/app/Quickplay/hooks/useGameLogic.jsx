@@ -34,7 +34,6 @@ export function useGameLogic() {
     try {
       const res = await fetch(`http://localhost:5000/api/deezer/artist/${ARTIST_ID_TEST}/albums`)
       const data = await res.json()
-      console.log(`albums `, data.data)
       const albumData = data.data
       const singles = albumData.filter((album) => album.record_type === "single" && album.explicit_lyrics === true)
       const albums = albumData.filter(album => album.record_type === "album" && album.explicit_lyrics === true)
@@ -51,7 +50,7 @@ export function useGameLogic() {
     try {
       const res = await fetch(`http://localhost:5000/api/deezer/${id}/tracks`)
       const trackdata = await res.json()
-      console.log("trackdata: ", trackdata.data)
+      console.log("fetchTrackList: ", trackdata)
       return trackdata
     } catch (err) {
       console.error("error in fetchTrackList", err)
@@ -63,12 +62,13 @@ export function useGameLogic() {
 
   const getTracksFromSelectedAlbums = async () => {
     try {
-      const trackLists = await Promise.all(
-        selectedAlbumsIds.map(id => fetchTrackList(id))
-      );
-      console.log(trackLists)
+      const trackLists = [];
+      for (const id of selectedAlbumsIds) {
+        const tracks = await fetchTrackList(id);
+        trackLists.push(tracks);
+      }
+      console.log("tracklist after fetchingTrackList:", trackLists)
       const tracks = trackLists.flat()
-      console.log("tracks:", tracks)
       setAllTracks(tracks);
       const shuffled = tracks;
 

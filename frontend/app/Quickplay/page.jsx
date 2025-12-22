@@ -60,7 +60,7 @@ function Quickplay() {
           allTracks={allTracks}
           setGameState={setGameState}
         />;
-      case 'finish':
+      case 'end':
         return <FinishState />;
       default:
         return null;

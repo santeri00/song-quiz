@@ -9,17 +9,13 @@ import Audio from "./Audio";
 
 function PlayState({ trackList, rounds, setRounds,
   currentTrackIndex, setCurrentTrackIndex, score, setScore, allTracks, setGameState }) {
-  console.log("tracklist:", trackList);
   const [currentTrack, setCurrentTrack] = useState(null)
   const [answers, setAnswers] = useState([])
   const [hasAnswered, setHasAnswered] = useState(false)
 
-  console.log("allTracks in PlayState:", allTracks);
-  console.log("trackList in PlayState:", trackList);
   const tracks = trackList; // change later
   const pool = allTracks;  // change later
   const audioRef = useRef(null);
-  console.log("tracks in PlayState:", tracks);
 
 
 
@@ -49,6 +45,7 @@ function PlayState({ trackList, rounds, setRounds,
     if (!tracks.length) return;
     if (currentTrackIndex >= rounds) {
       setGameState("end");
+      return;
     }
 
     generateRound(currentTrackIndex);
@@ -89,7 +86,7 @@ function PlayState({ trackList, rounds, setRounds,
         <Audio audioRef={audioRef} />
         <PlayNavbar currentTrackIndex={currentTrackIndex} rounds={rounds} />
         <div className="flex flex-col items-center justify-center flex-1">
-          <div className=" w-3/4 lg:w-1/3">
+          <div className=" w-3/4 lg:w-4/9">
 
 
             <QuestionCard Question={"What's this track"} />
@@ -101,7 +98,7 @@ function PlayState({ trackList, rounds, setRounds,
                   index={index + 1}
                   title={track.title}
                   isAnswer={track.title === currentTrack?.title}
-                  disabled={hasAnswered}
+                  hasAnswered={hasAnswered}
                   onClick={() => handleAnswer(track)}
                 />
               ))}
