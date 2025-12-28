@@ -66,6 +66,15 @@ function PlayState({ trackList, rounds, setRounds,
 
     if (track.title === currentTrack.title) {
       setScore(prev => prev + 1);
+      setScoreList(prev => [...prev, {
+        title: currentTrack.title,
+        correct: true
+      }])
+    } else {
+      setScoreList(prev => [...prev, {
+        title: currentTrack.title,
+        correct: false
+      }])
     }
 
     pauseAudio();
