@@ -24,12 +24,15 @@ const List = ({ items, selectedIds, onSelect, toggleAll, singles, setSelectedAlb
       <div className='flex flex-row flex-wrap gap-5 justify-center'>
         {items.map((item) => (
           <label key={item.id}
+            onMouseDown={(e) => e.preventDefault()}
             className="relative flex flex-col items-center text-center box-border border p-5
                           bg-neutral-900 hover:text-teal-500  has-checked:text-teal-500
                           cursor-pointer rounded-sm transition ease-in duration-200 select-none"
           >
             <div>
-              <img src={item.cover_medium} alt={item.title} className='h-36 w-36' />
+              <img src={item.cover_medium} alt={item.title} className='h-36 w-36'
+                draggable={false}
+              />
             </div>
 
             <p className='text-wrap w-28 pb-4'>{item.title}</p>
@@ -48,12 +51,14 @@ const List = ({ items, selectedIds, onSelect, toggleAll, singles, setSelectedAlb
           <label className="relative flex flex-col items-center text-center box-border border p-5
                             bg-neutral-900 hover:text-teal-500 has-checked:text-teal-500
                             cursor-pointer rounded-sm transition ease-in duration-200 select-none"
+            onMouseDown={(e) => e.preventDefault()}
           >
             <div>
               <img
                 src={singles[0]?.cover_medium}
                 alt="Singles Collection"
                 className='h-36 w-36 object-cover opacity-80'
+                draggable={false}
               />
             </div>
             <p className='text-wrap w-28 pb-4'>Singles</p>
