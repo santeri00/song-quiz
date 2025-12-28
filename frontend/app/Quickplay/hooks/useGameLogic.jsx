@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useEffect, useRef } from 'react';
-import mockalbumdata from '../../mockalbumdata'
-import mocktracklist from '../../mocktracklist';
-import { mockTracks } from "../mocks/mockTenTracks";
+// import mockalbumdata from '../../mockalbumdata'
+// import mocktracklist from '../../mocktracklist';
+// import { mockTracks } from "../mocks/mockTenTracks";
 
 export function useGameLogic() {
   const [gameState, setGameState] = useState('select'); // 'select', 'play', 'end'
@@ -16,27 +16,27 @@ export function useGameLogic() {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [trackList, setTrackList] = useState([]);
-  const [rounds, setRounds] = useState(10);
+  const [rounds, setRounds] = useState(1);
   const [allTracks, setAllTracks] = useState([]);
+
+  //end state
+  const [scoreList, setScoreList] = useState([]);
 
   const ARTIST_ID_TEST = 4495513
 
-  useEffect(() => {
-    // const albums = mockalbumdata.data.filter(
-    //   album => album.record_type === "album" && album.explicit_lyrics === true
-    // );
-    // setAlbums(albums)
-    fetchAlbums();
-  }, [])
+
 
 
   const fetchAlbums = async () => {
     try {
+      console.log("Fetching albums...")
       const res = await fetch(`http://localhost:5000/api/deezer/artist/${ARTIST_ID_TEST}/albums`)
       const data = await res.json()
+      console.log("data:", data)
       const albumData = data.data
       const singles = albumData.filter((album) => album.record_type === "single" && album.explicit_lyrics === true)
       const albums = albumData.filter(album => album.record_type === "album" && album.explicit_lyrics === true)
+      console.log("singles", singles)
       setSingles(singles)
       setAlbums(albums)
 
@@ -44,6 +44,10 @@ export function useGameLogic() {
       console.error("error getting album data", error)
     }
   }
+
+  useEffect(() => {
+    fetchAlbums();
+  }, [])
 
   const fetchTrackList = async (id) => {
     console.log("fetching with id:", id)
@@ -147,6 +151,8 @@ export function useGameLogic() {
     setRounds,
     allTracks,
     setAllTracks,
+    scoreList,
+    setScoreList
 
   }
 }

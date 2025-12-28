@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function FinishState({ selectedIds, toggleAll }) {
+export default function EndState({ trackList, score, scoreList }) {
 
   return (
     <section>

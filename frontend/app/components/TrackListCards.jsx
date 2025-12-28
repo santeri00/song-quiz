@@ -21,7 +21,7 @@ const List = ({ items, selectedIds, onSelect, toggleAll, singles, setSelectedAlb
       >
         select all
       </button>
-      <div className='flex flex-row flex-wrap gap-5'>
+      <div className='flex flex-row flex-wrap gap-5 justify-center'>
         {items.map((item) => (
           <label key={item.id}
             className="relative flex flex-col items-center text-center box-border border p-5

@@ -8,7 +8,7 @@ import QuestionCard from "./QuestionCard";
 import Audio from "./Audio";
 
 function PlayState({ trackList, rounds, setRounds,
-  currentTrackIndex, setCurrentTrackIndex, score, setScore, allTracks, setGameState }) {
+  currentTrackIndex, setCurrentTrackIndex, score, setScore, allTracks, setGameState, scoreList, setScoreList }) {
   const [currentTrack, setCurrentTrack] = useState(null)
   const [answers, setAnswers] = useState([])
   const [hasAnswered, setHasAnswered] = useState(false)

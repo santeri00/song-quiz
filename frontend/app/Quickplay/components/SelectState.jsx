@@ -12,7 +12,7 @@ export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setS
       {albums?.length > 0 ? (
         <>
           <h1>Select albums from list to play</h1>
-          <div className=''>
+          <div className='flex justify-center items-center'>
             <List
               items={albums}
               singles={singles}
