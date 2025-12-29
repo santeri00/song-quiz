@@ -16,13 +16,13 @@ export function useGameLogic() {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [trackList, setTrackList] = useState([]);
-  const [rounds, setRounds] = useState(1);
+  const [rounds, setRounds] = useState(10);
   const [allTracks, setAllTracks] = useState([]);
 
   //end state
   const [scoreList, setScoreList] = useState([]);
 
-  const ARTIST_ID_TEST = 4495513
+  const ARTIST_ID_TEST = 14450
 
 
 

@@ -17,7 +17,7 @@ export default function Home() {
 
 
 
-
+  console.log(this);
   const handleMouseDown = (button_num) => {
     if (button_num === 2) {
       setIsScaled2(true)
