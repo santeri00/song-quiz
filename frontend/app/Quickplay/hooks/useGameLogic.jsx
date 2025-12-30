@@ -25,6 +25,18 @@ export function useGameLogic() {
   const ARTIST_ID_TEST = 4495513
 
 
+  const removeDupes = (albums) => {
+    const map = new Map();
+
+    albums.forEach(album => {
+      const key = album.title.toLowerCase();
+      if (!map.has(key)) {
+        map.set(key, album);
+      }
+    })
+    return Array.from(map.values());
+  }
+
 
 
   const fetchAlbums = async () => {
@@ -34,8 +46,9 @@ export function useGameLogic() {
       const data = await res.json()
       console.log("data:", data)
       const albumData = data.data
-      const singles = albumData.filter((album) => album.record_type === "single" && album.explicit_lyrics === true)
-      const albums = albumData.filter(album => album.record_type === "album" || album.record_type == "ep" && album.explicit_lyrics === true)
+      const singles = removeDupes(albumData.filter((album) => album.record_type === "single" && album.explicit_lyrics === true))
+      const albums = removeDupes(albumData.filter(album => (album.record_type === "album" || album.record_type === "ep")
+        && album.explicit_lyrics === true))
       console.log("singles", singles)
       setSingles(singles)
       setAlbums(albums)
@@ -104,14 +117,14 @@ export function useGameLogic() {
       audioRef.current.pause()
     }
   }
-
-  const allSelected = albums.length === selectedAlbumsIds.length && albums.every(album => selectedAlbumsIds.includes(album.id))
+  const allItems = [...albums, ...singles];
+  const allSelected = selectedAlbumsIds.length === allItems.length && allItems.length > 0;
 
   const toggleAll = () => {
     if (allSelected) {
       setSelectedAlbumsIds([])
     } else {
-      setSelectedAlbumsIds(albums.map(album => album.id))
+      setSelectedAlbumsIds(allItems.map(album => album.id))
     }
   }
 
