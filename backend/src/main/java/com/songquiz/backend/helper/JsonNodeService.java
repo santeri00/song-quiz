@@ -11,7 +11,13 @@ public class JsonNodeService {
     ObjectMapper mapper = new ObjectMapper();
     ArrayNode resultTracks = mapper.createArrayNode();
 
-    responseBody.get("data").forEach(track -> {
+    JsonNode dataNode = responseBody.get("data");
+
+    if (dataNode == null || !dataNode.isArray()) {
+      throw new IllegalStateException("Invalid id or unexpected response structure from Deezer API");
+    }
+
+    dataNode.forEach(track -> {
       ObjectNode n = mapper.createObjectNode();
       n.put("id", track.get("id").asLong());
       n.put("title", track.get("title").asString());

@@ -22,7 +22,7 @@ export function useGameLogic() {
   //end state
   const [scoreList, setScoreList] = useState([]);
 
-  const ARTIST_ID_TEST = 14450
+  const ARTIST_ID_TEST = 4495513
 
 
 
@@ -35,7 +35,7 @@ export function useGameLogic() {
       console.log("data:", data)
       const albumData = data.data
       const singles = albumData.filter((album) => album.record_type === "single" && album.explicit_lyrics === true)
-      const albums = albumData.filter(album => album.record_type === "album" && album.explicit_lyrics === true)
+      const albums = albumData.filter(album => album.record_type === "album" || album.record_type == "ep" && album.explicit_lyrics === true)
       console.log("singles", singles)
       setSingles(singles)
       setAlbums(albums)
