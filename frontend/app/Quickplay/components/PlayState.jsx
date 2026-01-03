@@ -87,17 +87,18 @@ function PlayState({ trackList, rounds, setRounds,
 
   if (trackList.length === 0) {
     return (
-      <p className="flex justify-center items-center h-screen">loading...</p>
+      <p className="flex justify-center items-center h-screen">loading songs...</p>
     )
   } else {
     return (
       <div className="flex flex-col min-h-screen">
-        <Audio audioRef={audioRef} />
+        <div className="hidden md:block max-[1020px]:right-1">
+          <Audio audioRef={audioRef} />
+        </div>
+
         <PlayNavbar currentTrackIndex={currentTrackIndex} rounds={rounds} />
         <div className="flex flex-col items-center justify-center flex-1">
-          <div className=" w-3/4 lg:w-4/9">
-
-
+          <div className=" w-3/5 lg:w-4/9">
             <QuestionCard Question={"What's this track"} />
 
             <div className="grid grid-cols-2 grid-rows-2 gap-6 mt-8">
