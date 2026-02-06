@@ -1,20 +1,33 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import Image from "next/image";
 import Navbar from "./components/Navbar";
 import { Play } from 'lucide-react';
 import { useState } from "react";
-import getSong from "./api/preview";
 
 export default function Home() {
   const router = useRouter();
 
   const [isScaled, setIsScaled] = useState(false);
-  const [isScaled2, setIsScaled2] = useState(false)
-  const [trackIds, setTrackIds] = useState([])
-  const [token, setToken] = useState("")
-  const [url, setUrl] = useState("")
+  const [isScaled2, setIsScaled2] = useState(false);
 
+  //
+  const createLobby = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/lobby/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+      const data = await response.text();
+      console.log('Lobby created:', data);
+      sessionStorage.setItem('ticket', 'valid');
+      router.push(`/lobby/${data}`);
+    } catch (error) {
+      console.error('Error creating lobby:', error);
+    }
+  }
 
 
   console.log(this);
@@ -54,7 +67,10 @@ export default function Home() {
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            className={`flex-row hover:text-teal-500 transition ease-in-out duration-200 cursor-pointer bg-neutral-900 border-1 rounded-sm w-60 h-70 items-center justify-center flex mt-10  ${isScaled ? 'scale-105' : 'scale-100'} `}>
+            className={`flex-row hover:text-teal-500 transition ease-in-out duration-200 cursor-pointer bg-neutral-900 border-1 rounded-sm w-60 h-70 items-center justify-center flex mt-10  ${isScaled ? 'scale-105' : 'scale-100'} `}
+            onClick={createLobby}
+          >
+
             Play <Play className="" />
           </button>
 
