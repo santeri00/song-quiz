@@ -13,18 +13,21 @@ function Lobby() {
     const [username, setUsername] = useState("Player" + Math.floor(Math.random() * 1000));
     const router = useRouter();
     const clientRef = useRef(null);
-
+    const [isAuthorized, setIsAuthorized] = useState(false);
 
     useEffect(() => {
         if (!roomId) return;
         if (clientRef.current) return;
         const hasTicket = sessionStorage.getItem('ticket');
         if (!hasTicket) {
-            router.push(`/join/${roomId}`);
+            router.replace(`/join/${roomId}`);
+            return;
         }
+        setIsAuthorized(true);
         setTimeout(() => {
             sessionStorage.removeItem('ticket');
         }, 1000);
+
         const socket = new SockJs('http://localhost:5000/ws-game');
         const client = new Client({
             webSocketFactory: () => socket,
@@ -45,11 +48,20 @@ function Lobby() {
             },
         })
         client.activate();
+        clientRef.current = client;
 
         return () => {
-            client.deactivate();
+            if (clientRef.current) {
+                clientRef.current.deactivate();
+                clientRef.current = null;
+            }
         };
     }, [roomId, router, username]);
+
+
+    if (!isAuthorized) {
+        return null;
+    }
 
     return (
         <div>
