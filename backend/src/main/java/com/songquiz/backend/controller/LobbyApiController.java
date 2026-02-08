@@ -4,14 +4,20 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.songquiz.backend.model.RoomState;
 import com.songquiz.backend.service.GameManagerService;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/lobby")
 @CrossOrigin(origins = "*")
@@ -27,7 +33,18 @@ public class LobbyApiController {
   public ResponseEntity<String> createRoom(@RequestBody Map<String, String> payload) {
 
     RoomState room = gameManagerService.createRoom();
+    log.info("Room {} created", room.getRoomId());
     return ResponseEntity.ok(room.getRoomId());
+  }
+
+  @GetMapping("/active")
+  public ResponseEntity<String> getRoomById(@RequestParam String roomId) {
+    RoomState room = gameManagerService.getRoom(roomId);
+    if (room != null) {
+      return ResponseEntity.ok(room.getRoomId());
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 
 }

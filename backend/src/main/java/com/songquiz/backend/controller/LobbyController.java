@@ -11,6 +11,9 @@ import com.songquiz.backend.model.Player;
 import com.songquiz.backend.model.RoomState;
 import com.songquiz.backend.service.GameManagerService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class LobbyController {
 
@@ -34,6 +37,7 @@ public class LobbyController {
         player.setHost(true);
       }
       room.addPlayer(player);
+      log.info("Player {} joined room {}", player, roomId);
       return room;
     }
     return room;
