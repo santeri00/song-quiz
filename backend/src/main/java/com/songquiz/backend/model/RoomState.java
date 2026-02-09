@@ -9,6 +9,7 @@ public class RoomState {
 
   private GameStatus gameState;
   private int currentRound;
+  private int totalRounds;
   private List<Song> songs;
 
   public RoomState(String roomId) {
@@ -16,6 +17,7 @@ public class RoomState {
     this.gameState = GameStatus.LOBBY;
     this.currentRound = 0;
     this.songs = new ArrayList<>();
+    this.totalRounds = 10;
   }
 
   public void addPlayer(Player player) {
@@ -53,6 +55,14 @@ public class RoomState {
 
   public void setCurrentRound(int currentRound) {
     this.currentRound = currentRound;
+  }
+
+  public int getTotalRounds() {
+    return totalRounds;
+  }
+
+  public void setTotalRounds(int totalRounds) {
+    this.totalRounds = totalRounds;
   }
 
   public void setSongs(List<Song> songs) {

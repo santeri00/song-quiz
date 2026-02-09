@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import React from "react";
-export default function SettingsWindow({ onClose, isOpen }) {
+export default function SettingsWindow({ onClose, isOpen, handleRoundsChange, rounds }) {
   if (!isOpen) return null;
 
   return (
@@ -14,7 +14,10 @@ export default function SettingsWindow({ onClose, isOpen }) {
         </div>
         <div className="bg-neutral-800 w-auto p-4">
           <span>Rounds</span>
-          <select className="bg-neutral-700 p-2 rounded-md w-full mt-2">
+          <select className="bg-neutral-700 p-2 rounded-md w-full mt-2"
+            value={rounds}
+            onChange={(e) => handleRoundsChange(e.target.value)}
+          >
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="15">15</option>

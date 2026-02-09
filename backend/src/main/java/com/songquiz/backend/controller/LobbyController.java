@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import com.songquiz.backend.model.Player;
 import com.songquiz.backend.model.RoomState;
+import com.songquiz.backend.model.SettingsDto;
 import com.songquiz.backend.service.GameManagerService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,19 @@ public class LobbyController {
     }
     return room;
 
+  }
+
+  @MessageMapping("/lobby/{roomId}/settings")
+  @SendTo("/topic/lobby/{roomId}")
+  public RoomState updateSettings(@DestinationVariable String roomId, @Payload SettingsDto settings) {
+    RoomState room = gameManagerService.getRoom(roomId);
+
+    if (room != null) {
+      room.setTotalRounds(settings.getRounds());
+
+      log.info("Room {} updated settings: {}", roomId, settings);
+    }
+    return room;
   }
 
 }

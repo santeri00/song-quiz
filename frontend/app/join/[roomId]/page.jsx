@@ -12,6 +12,7 @@ export default function JoinPage() {
     const validateRoom = async () => {
       try {
         const response = await fetch(`http://localhost:5000/api/lobby/active?roomId=${roomId}`);
+
         if (!response.ok) {
           router.push('/');
         } else {

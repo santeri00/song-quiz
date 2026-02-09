@@ -8,7 +8,7 @@ import SockJs from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { Settings, Clipboard } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
-import SettingsWindow from '../SettingsWindow';
+import SettingsWindow from '../components/SettingsWindow';
 
 function Lobby() {
     const { roomId } = useParams();
@@ -18,7 +18,7 @@ function Lobby() {
     const clientRef = useRef(null);
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
+    const [rounds, setRounds] = useState(10);
 
     useEffect(() => {
         if (!roomId) return;
@@ -41,6 +41,7 @@ function Lobby() {
                 client.subscribe(`/topic/lobby/${roomId}`, (message) => {
                     const roomState = JSON.parse(message.body);
                     setPlayers(roomState.players);
+                    setRounds(roomState.totalRounds);
                 });
 
                 client.publish({
@@ -64,6 +65,16 @@ function Lobby() {
         };
     }, [roomId, router, username]);
 
+
+    const handleSettingsUpdate = (newRounds) => {
+        if (clientRef.current) {
+            clientRef.current.publish({
+                destination: `/app/lobby/${roomId}/settings`,
+                body: JSON.stringify({ rounds: newRounds }),
+            })
+        }
+        setRounds(newRounds);
+    }
 
     if (!isAuthorized) {
         return null;
@@ -104,7 +115,7 @@ function Lobby() {
 
 
                 </div>
-                <SettingsWindow isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+                <SettingsWindow isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} handleRoundsChange={handleSettingsUpdate} rounds={rounds} />
                 <div className='grid grid-cols-10 gap-5 '>
                     <div className='col-span-3 border-1 rounded-sm p-6 '>
                         {players.length > 0 ? (
