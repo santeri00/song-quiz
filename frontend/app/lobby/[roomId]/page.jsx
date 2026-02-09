@@ -8,6 +8,7 @@ import SockJs from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { Settings, Clipboard } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import SettingsWindow from '../SettingsWindow';
 
 function Lobby() {
     const { roomId } = useParams();
@@ -16,6 +17,8 @@ function Lobby() {
     const router = useRouter();
     const clientRef = useRef(null);
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
 
     useEffect(() => {
         if (!roomId) return;
@@ -97,11 +100,11 @@ function Lobby() {
                             );
                         }}
                     />
-                    <Settings className=' cursor-pointer' size={36} />
+                    <Settings className=' cursor-pointer' size={36} onClick={() => setIsSettingsOpen(true)} />
 
 
                 </div>
-
+                <SettingsWindow isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
                 <div className='grid grid-cols-10 gap-5 '>
                     <div className='col-span-3 border-1 rounded-sm p-6 '>
                         {players.length > 0 ? (
