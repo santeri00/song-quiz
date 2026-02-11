@@ -9,6 +9,7 @@ import { Client } from '@stomp/stompjs';
 import { Settings, Clipboard } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import SettingsWindow from '../components/SettingsWindow';
+import PlayListSelector from '../components/PlayListSelector';
 
 function Lobby() {
     const { roomId } = useParams();
@@ -19,6 +20,7 @@ function Lobby() {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [rounds, setRounds] = useState(10);
+    const [selectedPlayList, setSelectedPlayList] = useState(null);
 
     useEffect(() => {
         if (!roomId) return;
@@ -42,6 +44,7 @@ function Lobby() {
                     const roomState = JSON.parse(message.body);
                     setPlayers(roomState.players);
                     setRounds(roomState.totalRounds);
+                    setSelectedPlayList(roomState.selectedPlayListId);
                 });
 
                 client.publish({
@@ -74,6 +77,16 @@ function Lobby() {
             })
         }
         setRounds(newRounds);
+    }
+
+    const handlePlayListSelect = (id, name) => {
+        if (clientRef.current) {
+            clientRef.current.publish({
+                destination: `/app/lobby/${roomId}/playlist`,
+                body: JSON.stringify({ artistId: id, artistName: name }),
+            })
+        }
+        setSelectedPlayList(id);
     }
 
     if (!isAuthorized) {
@@ -132,7 +145,7 @@ function Lobby() {
 
                     </div>
                     <div className='col-span-7 border-1 rounded-sm '>
-
+                        < PlayListSelector selectedPlayList={selectedPlayList} onSelect={handlePlayListSelect} />
                     </div>
                 </div>
             </section>
