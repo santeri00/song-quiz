@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import com.songquiz.backend.model.Player;
 import com.songquiz.backend.model.RoomState;
 import com.songquiz.backend.model.SettingsDto;
+import com.songquiz.backend.model.selectedPlayListDto;
 import com.songquiz.backend.service.GameManagerService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,19 @@ public class LobbyController {
       room.setTotalRounds(settings.getRounds());
 
       log.info("Room {} updated settings: {}", roomId, settings);
+    }
+    return room;
+  }
+
+  @MessageMapping("/lobby/{roomId}/playlist")
+  @SendTo("/topic/lobby/{roomId}")
+  public RoomState setPlayList(@DestinationVariable String roomId, @Payload selectedPlayListDto playList) {
+    RoomState room = gameManagerService.getRoom(roomId);
+
+    if (room != null) {
+      room.setSelectedPlayListId(playList.getArtistId());
+
+      log.info("Room {} updated playlist: {}", roomId, playList);
     }
     return room;
   }
