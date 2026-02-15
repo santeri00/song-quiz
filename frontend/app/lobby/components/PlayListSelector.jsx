@@ -22,8 +22,8 @@ export default function PlayListSelector({ selectedPlayList, onSelect }) {
   }
   return (
     <>
-      <div>
-        <h2 className="text-lg font-bold m-4">Select a playlist</h2>
+      <div className="p-2">
+        <h2 className="text-lg font-bold m-4 text-left">Select a playlist</h2>
 
         <div>
           {GENRES.map(genre => (
@@ -42,12 +42,12 @@ export default function PlayListSelector({ selectedPlayList, onSelect }) {
           {filteredPlayList.map(artist => (
             <div
               key={artist.id}
-              className={`p-4 m-2 bg-neutral-800 rounded-md w-20 h-20 cursor-pointer hover:text-teal-500
-                ${selectedPlayList === artist.id ? "border-2 border-teal-500" : ""}`}
+              className={`m-2 rounded-md flex flex-col cursor-pointer items-center hover:text-teal-500 text-center
+                ${selectedPlayList === artist.id ? "text-teal-500" : ""}`}
               onClick={() => onSelect(artist.id, artist.name)}
             >
-
-              <span className="text-lg font-semibold">{artist.name}</span>
+              <img className={`rounded-full w-24 h-24 ${selectedPlayList === artist.id ? "border-2 border-teal-500" : ""}`} src="https://cdn-images.dzcdn.net/images/artist/bb76c2ee3b068726ab4c37b0aabdb57a/56x56-000000-80-0-0.jpg" alt="" />
+              <span className="text-lg">{artist.name}</span>
             </div>
 
           ))}

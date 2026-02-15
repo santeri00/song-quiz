@@ -89,9 +89,17 @@ function Lobby() {
         setSelectedPlayList(id);
     }
 
-    if (!isAuthorized) {
-        return null;
+    const startGame = () => {
+        if (clientRef.current) {
+            clientRef.current.publish({
+                destination: `/app/lobby/${roomId}/start`,
+                body: JSON.stringify({}),
+            })
+
+            console.log("game start");
+        }
     }
+
 
 
     const playerCard = (player) => {
@@ -103,13 +111,17 @@ function Lobby() {
             </div>
         )
     }
+
+    if (!isAuthorized) {
+        return null;
+    }
     return (
         <div>
             <Toaster />
             <Navbar />
-            <section className='flex justify-center  flex-col gap-5 w-7/10 mx-auto'>
+            <section className='flex justify-center flex-col gap-5 w-7/10 mx-auto'>
                 <h1 className='mt-5'>Room ID: {roomId}</h1>
-                <div className='mt-20 bg-neutral-900 p-8 rounded-md flex flex-row items-center gap-4'>
+                <div className='mt-5 bg-neutral-900 p-8 rounded-md flex flex-row items-center gap-4'>
                     <h1 className='ml-5'>Room Creation</h1>
                     <Clipboard className='ml-auto cursor-pointer' size={36}
                         onClick={() => {
@@ -129,24 +141,36 @@ function Lobby() {
 
                 </div>
                 <SettingsWindow isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} handleRoundsChange={handleSettingsUpdate} rounds={rounds} />
-                <div className='grid grid-cols-10 gap-5 '>
-                    <div className='col-span-3 border-1 rounded-sm p-6 '>
-                        {players.length > 0 ? (
-                            <ul>
-                                {players.map((player, index) => (
-                                    <li key={index} className='mb-3'>
-                                        {playerCard(player)}
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No players in the lobby</p>
-                        )}
+                <div className='flex flex-col'>
+                    <div className='flex flex-row items-start gap-5 '>
+                        <div className='border-1 rounded-sm p-2 '>
+                            {players.length > 0 ? (
+                                <ul>
+                                    {players.map((player, index) => (
+                                        <li key={index} className='m-1.5'>
+                                            {playerCard(player)}
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No players in the lobby</p>
+                            )}
 
+                        </div>
+
+                        <div className='border-1 rounded-sm w-full'>
+                            < PlayListSelector selectedPlayList={selectedPlayList} onSelect={handlePlayListSelect} />
+                        </div>
                     </div>
-                    <div className='col-span-7 border-1 rounded-sm '>
-                        < PlayListSelector selectedPlayList={selectedPlayList} onSelect={handlePlayListSelect} />
+
+                    <div className='flex align-center justify-center mt-10'>
+                        <button className='bg-neutral-800 text-white px-4 py-2 m-2 rounded-md cursor-pointer hover:text-teal-500 w-100'
+                            disabled={!selectedPlayList}
+                            onClick={startGame}>
+                            start game
+                        </button>
                     </div>
+
                 </div>
             </section>
 
