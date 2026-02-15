@@ -16,7 +16,7 @@ public class GameManagerService {
   public RoomState createRoom() {
     String roomId = generateUniqueRoomId();
     RoomState room = new RoomState(roomId);
-    
+
     activeGames.put(roomId, room);
     return room;
   }
