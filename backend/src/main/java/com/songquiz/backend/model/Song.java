@@ -11,6 +11,5 @@ public class Song {
 
   private String id;
   private String title;
-  private String artist;
-  private String album;
+  private String previewUrl;
 }
