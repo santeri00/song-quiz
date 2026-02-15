@@ -41,7 +41,7 @@ public class DeezerProxyController {
   }
 
   @GetMapping("/artist/{artistId}/albums")
-  public Mono<ResponseEntity<JsonNode>> getMethodName(@PathVariable String artistId) {
+  public Mono<ResponseEntity<JsonNode>> getArtistAlbums(@PathVariable String artistId) {
     return webClientService.fetchAllAlbums("/artist/" + artistId + "/albums")
         .map(ResponseEntity::ok);
   }

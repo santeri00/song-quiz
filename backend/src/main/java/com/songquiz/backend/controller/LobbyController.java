@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+import com.songquiz.backend.helper.WebClientService;
+import com.songquiz.backend.model.GameStatus;
 import com.songquiz.backend.model.Player;
 import com.songquiz.backend.model.RoomState;
 import com.songquiz.backend.model.SettingsDto;
@@ -20,9 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 public class LobbyController {
 
   private final GameManagerService gameManagerService;
+  private final WebClientService webClientService;
 
-  public LobbyController(GameManagerService gameManagerService) {
+  public LobbyController(GameManagerService gameManagerService, WebClientService webClientService) {
     this.gameManagerService = gameManagerService;
+    this.webClientService = webClientService;
   }
 
   @MessageMapping("/lobby/{roomId}/join")
@@ -69,6 +73,21 @@ public class LobbyController {
 
       log.info("Room {} updated playlist: {}", roomId, playList);
     }
+    return room;
+  }
+
+  @MessageMapping("/lobby/{roomId}/start")
+  @SendTo("/topic/lobby/{roomId}")
+  public RoomState startGame(@DestinationVariable String roomId) {
+    RoomState room = gameManagerService.getRoom(roomId);
+
+    if (room != null) {
+      webClientService.getGameSongs(room.getSelectedPlayListId(), room.getTotalRounds());
+      room.setCurrentRound(1);
+      room.setGameState(GameStatus.PLAYING);
+      log.info("Room {} started the game", roomId);
+    }
+
     return room;
   }
 
