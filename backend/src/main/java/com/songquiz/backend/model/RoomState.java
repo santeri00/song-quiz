@@ -18,6 +18,7 @@ public class RoomState {
   private String selectedPlayListId; // stores artists id to later fetch songs with
   private List<Song> songs;
   private List<Song> currentRoundSongs;
+  private int maxPlayerCount = 8;
 
   public RoomState(String roomId) {
     this.roomId = roomId;
@@ -29,6 +30,7 @@ public class RoomState {
   }
 
   public void addPlayer(Player player) {
+    
     players.removeIf(p -> p.getSessionId().equals(player.getSessionId()));
     players.add(player);
   }

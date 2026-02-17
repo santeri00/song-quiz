@@ -9,7 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Song {
 
-  private String id;
+  private String artist;
   private String title;
   private String previewUrl;
+
+  @Override
+  public String toString() {
+    return "Song{" +
+        "artist='" + artist + '\'' +
+        ", title='" + title + '\'' +
+        '}';
+  }
 }
