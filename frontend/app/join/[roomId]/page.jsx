@@ -1,18 +1,34 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 export default function JoinPage() {
   const { roomId } = useParams();
   const router = useRouter();
   const [isValid, setIsValid] = useState(false);
-
+  const [errorMsg, setErrorMsg] = useState("");
   useEffect(() => {
     if (!roomId) return;
     const validateRoom = async () => {
       try {
         const response = await fetch(`http://localhost:5000/api/lobby/active?roomId=${roomId}`);
+        if (response.status === 403) {
+          setErrorMsg("Room is full");
+          toast.error("Room is full", {
+            duration: 2000,
+            style: {
+              background: '#171717',
+              color: '#fff',
+            }
+          });
+          setTimeout(() => {
+            router.push('/');
+          }, 2000);
 
+          return;
+        }
         if (!response.ok) {
           router.push('/');
         } else {
@@ -37,8 +53,9 @@ export default function JoinPage() {
 
   if (!isValid) {
     return (
-      <div className="flex flex-col h-screen items-center justify-center bg-neutral-900 text-white">
-        <div className="text-center bg-neutral-900 text-white">
+      <div className="flex flex-col h-screen items-center justify-center bg-neutral-800 text-white">
+        <Toaster />
+        <div className="text-center text-white">
           Loading...
         </div>
       </div >

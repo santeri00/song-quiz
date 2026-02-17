@@ -122,7 +122,7 @@ function Lobby() {
             <section className='flex justify-center flex-col gap-5 w-7/10 mx-auto'>
                 <h1 className='mt-5'>Room ID: {roomId}</h1>
                 <div className='mt-5 bg-neutral-900 p-8 rounded-md flex flex-row items-center gap-4'>
-                    <h1 className='ml-5'>Room Creation</h1>
+                    <p>Players: {players.length}/8</p>
                     <Clipboard className='ml-auto cursor-pointer' size={36}
                         onClick={() => {
                             navigator.clipboard.writeText("http://localhost:3000/join/" + roomId);
