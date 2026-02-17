@@ -16,6 +16,7 @@ import com.songquiz.backend.model.selectedPlayListDto;
 import com.songquiz.backend.service.GameManagerService;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Controller
@@ -78,17 +79,27 @@ public class LobbyController {
 
   @MessageMapping("/lobby/{roomId}/start")
   @SendTo("/topic/lobby/{roomId}")
-  public RoomState startGame(@DestinationVariable String roomId) {
+  public Mono<RoomState> startGame(@DestinationVariable String roomId) {
     RoomState room = gameManagerService.getRoom(roomId);
 
-    if (room != null) {
-      webClientService.getGameSongs(room.getSelectedPlayListId(), room.getTotalRounds());
-      room.setCurrentRound(1);
-      room.setGameState(GameStatus.PLAYING);
-      log.info("Room {} started the game", roomId);
+    if (room.getSelectedPlayListId() == null) {
+      return Mono.just(room);
     }
 
-    return room;
+    return webClientService.getGameSongs(room.getSelectedPlayListId(), room.getTotalRounds())
+        .map(songs -> {
+          if (songs.size() < room.getTotalRounds()) {
+            log.warn("not enough songs, aborting game start");
+            return room;
+          }
+          room.setCurrentRoundSongs(songs.subList(0, room.getTotalRounds()));
+          room.setSongs(songs);
+          room.setCurrentRound(1);
+          room.setGameState(GameStatus.PLAYING);
+          log.info("Room {} started the game", roomId);
+          log.info("Selected songs: {}", songs.subList(0, room.getTotalRounds()));
+          return room;
+        });
   }
 
 }

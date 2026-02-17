@@ -40,11 +40,16 @@ public class LobbyApiController {
   @GetMapping("/active")
   public ResponseEntity<String> getRoomById(@RequestParam String roomId) {
     RoomState room = gameManagerService.getRoom(roomId);
-    if (room != null) {
-      return ResponseEntity.ok(room.getRoomId());
-    } else {
+    if (room == null) {
       return ResponseEntity.notFound().build();
     }
+
+    if (room.getPlayers().size() >= room.getMaxPlayerCount()) {
+      return ResponseEntity.status(403).body("Room is full");
+    }
+
+    return ResponseEntity.ok(room.getRoomId());
+
   }
 
 
