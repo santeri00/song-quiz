@@ -22,7 +22,7 @@ export default function PlayNavbar({ currentTrackIndex, rounds }) {
        bg-neutral-900 flex justify-center items-center z-10 [clip-path:polygon(0_0,100%_0,88%_100%,12%_100%)]
        '>
         <div className="font-bold text-2xl">
-          Round {currentTrackIndex + 1} / {rounds}
+          Round {currentTrackIndex} / {rounds}
         </div>
       </div>
 

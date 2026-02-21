@@ -96,7 +96,7 @@ function PlayState({ trackList, rounds, setRounds,
           <Audio audioRef={audioRef} />
         </div>
 
-        <PlayNavbar currentTrackIndex={currentTrackIndex} rounds={rounds} />
+        <PlayNavbar currentTrackIndex={currentTrackIndex + 1} rounds={rounds} />
         <div className="flex flex-col items-center justify-center flex-1">
           <div className=" w-3/5 lg:w-4/9">
             <QuestionCard Question={"What's this track"} />

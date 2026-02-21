@@ -10,6 +10,7 @@ import { Settings, Clipboard } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import SettingsWindow from '../components/SettingsWindow';
 import PlayListSelector from '../components/PlayListSelector';
+import MultiPlayState from '../components/MultiPlayState';
 
 function Lobby() {
     const { roomId } = useParams();
@@ -21,6 +22,11 @@ function Lobby() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [rounds, setRounds] = useState(10);
     const [selectedPlayList, setSelectedPlayList] = useState(null);
+    const [gameState, setGameState] = useState("");
+    const [songs, setSongs] = useState([]);
+    const [currentRound, setCurrentRound] = useState(0);
+    const [totalRounds, setTotalRounds] = useState(0);
+    const [allTracks, setAllTracks] = useState([]);
 
     useEffect(() => {
         if (!roomId) return;
@@ -45,6 +51,11 @@ function Lobby() {
                     setPlayers(roomState.players);
                     setRounds(roomState.totalRounds);
                     setSelectedPlayList(roomState.selectedPlayListId);
+                    setSongs(roomState.currentRoundSongs);
+                    setCurrentRound(roomState.currentRound);
+                    setTotalRounds(roomState.totalRounds);
+                    setAllTracks(roomState.songs);
+                    setGameState(roomState.gameState);
                 });
 
                 client.publish({
@@ -95,7 +106,7 @@ function Lobby() {
                 destination: `/app/lobby/${roomId}/start`,
                 body: JSON.stringify({}),
             })
-
+            setGameState("PLAYING");
             console.log("game start");
         }
     }
@@ -115,6 +126,23 @@ function Lobby() {
     if (!isAuthorized) {
         return null;
     }
+
+
+    if (gameState === "PLAYING") {
+        return (
+            <MultiPlayState
+                roomId={roomId}
+                username={username}
+                clientRef={clientRef}
+                songs={songs}
+                currentRound={currentRound}
+                totalRounds={totalRounds}
+                allTracks={allTracks}
+                players={players}
+            />
+        );
+    }
+
     return (
         <div>
             <Toaster />
