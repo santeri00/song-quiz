@@ -6,9 +6,10 @@ import lombok.Data;
 public class Player {
   private String sessionId;
   private String nickname;
-  private double score;
+  private double score = 0.0;
   private boolean isHost;
   private boolean guessIsCorrect;
+  private boolean hasAnswered;
 
   public Player(String sessionId, String nickname) {
     this.sessionId = sessionId;
@@ -16,6 +17,7 @@ public class Player {
     this.score = 0.0;
     this.isHost = false;
     this.guessIsCorrect = false;
+    this.hasAnswered = false;
   }
 
   public void updateScore(double points) {

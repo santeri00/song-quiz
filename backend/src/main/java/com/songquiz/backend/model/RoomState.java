@@ -30,7 +30,7 @@ public class RoomState {
   }
 
   public void addPlayer(Player player) {
-    
+
     players.removeIf(p -> p.getSessionId().equals(player.getSessionId()));
     players.add(player);
   }
@@ -56,6 +56,13 @@ public class RoomState {
     if (sessionId == null)
       return false;
     return players.removeIf(p -> sessionId.equals(p.getSessionId()));
+  }
+
+  public Player getPlayerByName(String name) {
+    return players.stream()
+        .filter(p -> p.getNickname().equals(name))
+        .findFirst()
+        .orElse(null);
   }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 import com.songquiz.backend.helper.WebClientService;
+import com.songquiz.backend.model.AnswerMsgDto;
 import com.songquiz.backend.model.GameStatus;
 import com.songquiz.backend.model.Player;
 import com.songquiz.backend.model.RoomState;
@@ -74,6 +75,36 @@ public class LobbyController {
 
       log.info("Room {} updated playlist: {}", roomId, playList);
     }
+    return room;
+  }
+
+  @MessageMapping("/lobby/{roomId}/answer")
+  @SendTo("/topic/lobby/{roomId}")
+  public RoomState handleAnswer(@DestinationVariable String roomId, @Payload AnswerMsgDto ans) {
+    RoomState room = gameManagerService.getRoom(roomId);
+
+    if (room == null) {
+      return null;
+    }
+    Player player = room.getPlayerByName(ans.getUsername());
+
+    if (player != null) {
+      player.updateScore(ans.getScore());
+      log.info("Player {} in room {} answered: {}, score: {}", player.getNickname(), roomId, ans.getScore(),
+          player.getScore());
+      player.setHasAnswered(true);
+    }
+    boolean isReady = room.getPlayers().stream().allMatch(Player::isHasAnswered);
+    if (isReady) {
+      room.setCurrentRound(room.getCurrentRound() + 1);
+      room.getPlayers().forEach(p -> p.setHasAnswered(false));
+      log.info("All players in room {} have answered. Moving to round {}", roomId, room.getCurrentRound());
+
+      if (room.getCurrentRound() > room.getTotalRounds()) {
+        room.setGameState(GameStatus.FINISHED);
+      }
+    }
+
     return room;
   }
 
