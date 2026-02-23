@@ -1,5 +1,8 @@
 package com.songquiz.backend.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -10,6 +13,7 @@ public class Player {
   private boolean isHost;
   private boolean guessIsCorrect;
   private boolean hasAnswered;
+  private List<AnswerStatus> answerHistory = new ArrayList<>();
 
   public Player(String sessionId, String nickname) {
     this.sessionId = sessionId;

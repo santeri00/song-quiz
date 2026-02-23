@@ -1,14 +1,19 @@
 package com.songquiz.backend.controller;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.songquiz.backend.helper.WebClientService;
 import com.songquiz.backend.model.AnswerMsgDto;
+import com.songquiz.backend.model.AnswerStatus;
 import com.songquiz.backend.model.GameStatus;
 import com.songquiz.backend.model.Player;
 import com.songquiz.backend.model.RoomState;
@@ -25,10 +30,13 @@ public class LobbyController {
 
   private final GameManagerService gameManagerService;
   private final WebClientService webClientService;
+  private final SimpMessagingTemplate msgTemplate;
 
-  public LobbyController(GameManagerService gameManagerService, WebClientService webClientService) {
+  public LobbyController(GameManagerService gameManagerService, WebClientService webClientService,
+      SimpMessagingTemplate msgTemplate) {
     this.gameManagerService = gameManagerService;
     this.webClientService = webClientService;
+    this.msgTemplate = msgTemplate;
   }
 
   @MessageMapping("/lobby/{roomId}/join")
@@ -49,7 +57,6 @@ public class LobbyController {
       return room;
     }
     return room;
-
   }
 
   @MessageMapping("/lobby/{roomId}/settings")
@@ -89,20 +96,33 @@ public class LobbyController {
     Player player = room.getPlayerByName(ans.getUsername());
 
     if (player != null) {
+
       player.updateScore(ans.getScore());
+      boolean isCorrect = ans.getScore() > 0;
+      player.getAnswerHistory()
+          .add(new AnswerStatus(isCorrect, room.getCurrentRoundSongs().get(room.getCurrentRound() - 1)));
       log.info("Player {} in room {} answered: {}, score: {}", player.getNickname(), roomId, ans.getScore(),
           player.getScore());
       player.setHasAnswered(true);
     }
     boolean isReady = room.getPlayers().stream().allMatch(Player::isHasAnswered);
     if (isReady) {
-      room.setCurrentRound(room.getCurrentRound() + 1);
-      room.getPlayers().forEach(p -> p.setHasAnswered(false));
-      log.info("All players in room {} have answered. Moving to round {}", roomId, room.getCurrentRound());
+      room.setRevealAnswerState(true);
 
-      if (room.getCurrentRound() > room.getTotalRounds()) {
-        room.setGameState(GameStatus.FINISHED);
-      }
+      new Timer().schedule(new TimerTask() {
+        @Override
+        public void run() {
+          room.setRevealAnswerState(false);
+          room.setCurrentRound(room.getCurrentRound() + 1);
+          room.getPlayers().forEach(p -> p.setHasAnswered(false));
+          log.info("All players in room {} have answered. Moving to round {}", roomId, room.getCurrentRound());
+          if (room.getCurrentRound() > room.getTotalRounds()) {
+            room.setGameState(GameStatus.FINISHED);
+          }
+          msgTemplate.convertAndSend("/topic/lobby/" + roomId, room);
+        }
+      }, 4000);
+
     }
 
     return room;

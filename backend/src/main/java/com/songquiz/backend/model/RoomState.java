@@ -19,6 +19,7 @@ public class RoomState {
   private List<Song> songs;
   private List<Song> currentRoundSongs;
   private int maxPlayerCount = 8;
+  private boolean revealAnswerState = false;
 
   public RoomState(String roomId) {
     this.roomId = roomId;
