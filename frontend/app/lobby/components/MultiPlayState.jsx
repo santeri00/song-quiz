@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import PlayNavbar from "../../Quickplay/components/PlayNavbar";
-import AnswerCard from "../../Quickplay/components/AnswerCard";
+import AnswerCard from "../components/AnswerCard";
 import QuestionCard from "../../Quickplay/components/QuestionCard";
 import Audio from "../../Quickplay/components/Audio";
 import ScoreBoard from "./ScoreBoard";
+
 export default function MultiPlayState({
   roomId,
   username,
@@ -12,8 +13,8 @@ export default function MultiPlayState({
   totalRounds,
   songs,
   allTracks,
-  players
-
+  players,
+  revealAnswerState,
 }) {
   const [currentOptions, setCurrentOptions] = useState([]);
   const [hasAnswered, setHasAnswered] = useState(false);
@@ -23,6 +24,7 @@ export default function MultiPlayState({
   const [isReady, setIsReady] = useState(false);
   const [countdown, setCountdown] = useState(3);
 
+  const [selectedTitle, setSelectedTitle] = useState(null);
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export default function MultiPlayState({
     if (allTracks.length === 0) return;
     if (!isReady) return;
     if (currentOptions.length > 0) return;
-
+    console.log("idkk");
     setHasAnswered(false);
     const correctSong = songs[currentRound - 1];
 
@@ -80,7 +82,7 @@ export default function MultiPlayState({
     if (hasAnswered) return;
 
     setHasAnswered(true);
-
+    setSelectedTitle(selectedTrack.title);
     const isCorrect = selectedTrack.title === songs[currentRound - 1].title;
 
     if (clientRef.current) {
@@ -138,11 +140,12 @@ export default function MultiPlayState({
             {currentOptions.map((track, index) => (
               <AnswerCard
                 key={index}
-                index={index + 1}
                 title={track.title}
                 isAnswer={track.title === songs[currentRound - 1].title}
                 hasAnswered={hasAnswered}
                 onClick={() => handleAnswer(track)}
+                revealAnswerState={revealAnswerState}
+                isSelected={selectedTitle === track.title}
               />
             ))}
           </div>

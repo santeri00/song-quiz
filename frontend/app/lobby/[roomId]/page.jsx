@@ -11,6 +11,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import SettingsWindow from '../components/SettingsWindow';
 import PlayListSelector from '../components/PlayListSelector';
 import MultiPlayState from '../components/MultiPlayState';
+import MultiEndState from '../components/MultiEndState';
 
 function Lobby() {
     const { roomId } = useParams();
@@ -27,6 +28,7 @@ function Lobby() {
     const [currentRound, setCurrentRound] = useState(0);
     const [totalRounds, setTotalRounds] = useState(0);
     const [allTracks, setAllTracks] = useState([]);
+    const [revealAnswerState, setRevealAnswerState] = useState(false);
 
     useEffect(() => {
         if (!roomId) return;
@@ -56,6 +58,7 @@ function Lobby() {
                     setTotalRounds(roomState.totalRounds);
                     setAllTracks(roomState.songs);
                     setGameState(roomState.gameState);
+                    setRevealAnswerState(roomState.revealAnswerState)
                 });
 
                 client.publish({
@@ -139,8 +142,17 @@ function Lobby() {
                 totalRounds={totalRounds}
                 allTracks={allTracks}
                 players={players}
+                revealAnswerState={revealAnswerState}
             />
         );
+    }
+    if (gameState === "FINISHED") {
+        return (
+            <MultiEndState
+                players={players}
+                user={username}
+            />
+        )
     }
 
     return (

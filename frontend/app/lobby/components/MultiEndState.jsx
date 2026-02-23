@@ -1,0 +1,47 @@
+import React from "react";
+import Navbar from "../../components/Navbar";
+import { CircleCheck, CircleX } from "lucide-react";
+
+export default function MultiEndState({ players, user }) {
+
+  const data = players.find(p => p.nickname === user);
+  const history = data?.answerHistory || [];
+
+  console.log("HISTORY DATA:", history);
+  return (
+    <section className="grid gap-5">
+      <Navbar />
+
+      <div className="text-center m-5 text-4xl">
+        <h2>Total score: {data?.score}</h2>
+      </div>
+
+      <div className="flex justify-center">
+        <div className="rounded-sm overflow-hidden w-full max-w-2xl">
+          <table className="w-full opacity-85">
+            <thead className="bg-neutral-900">
+              <tr>
+                <th className="p-3 text-left">Round</th>
+                <th className="p-3 text-left">Title</th>
+                <th className="p-3 text-left">Score</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {history.map((track, index) => (
+                <tr key={index} className="odd:bg-neutral-800 even:bg-neutral-900 " >
+                  <td className="text-left p-3">{index + 1}</td>
+                  <td className="text-left p-3">{track.song?.title}</td>
+                  <td className="text-left p-3">{track.correct ? <CircleCheck className="text-green-500" /> : <CircleX className="text-red-500" />}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+
+    </section>
+  )
+}
