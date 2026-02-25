@@ -118,7 +118,10 @@ public class LobbyController {
           log.info("All players in room {} have answered. Moving to round {}", roomId, room.getCurrentRound());
           if (room.getCurrentRound() > room.getTotalRounds()) {
             room.setGameState(GameStatus.FINISHED);
+          } else {
+            room.generateOptions();
           }
+
           msgTemplate.convertAndSend("/topic/lobby/" + roomId, room);
         }
       }, 4000);
@@ -143,9 +146,11 @@ public class LobbyController {
             log.warn("not enough songs, aborting game start");
             return room;
           }
+
+          room.setCurrentRound(1);
           room.setCurrentRoundSongs(songs.subList(0, room.getTotalRounds()));
           room.setSongs(songs);
-          room.setCurrentRound(1);
+          room.generateOptions();
           room.setGameState(GameStatus.PLAYING);
           log.info("Room {} started the game", roomId);
           log.info("Selected songs: {}", songs.subList(0, room.getTotalRounds()));

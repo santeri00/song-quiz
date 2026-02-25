@@ -1,6 +1,7 @@
 package com.songquiz.backend.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Data;
@@ -20,6 +21,7 @@ public class RoomState {
   private List<Song> currentRoundSongs;
   private int maxPlayerCount = 8;
   private boolean revealAnswerState = false;
+  private List<Song> options;
 
   public RoomState(String roomId) {
     this.roomId = roomId;
@@ -64,6 +66,21 @@ public class RoomState {
         .filter(p -> p.getNickname().equals(name))
         .findFirst()
         .orElse(null);
+  }
+
+  public void generateOptions() {
+    List<Song> roundOptions = new ArrayList<>();
+    Song correctSong = currentRoundSongs.get(currentRound - 1);
+    roundOptions.add(correctSong);
+
+    List<Song> wrongSongs = new ArrayList<>(songs);
+    wrongSongs.removeIf(song -> song.getTitle().equals(correctSong.getTitle()));
+
+    Collections.shuffle(wrongSongs);
+    roundOptions.addAll(wrongSongs.subList(0, 3));
+
+    Collections.shuffle(roundOptions);
+    options = roundOptions;
   }
 
 }
