@@ -29,6 +29,8 @@ function Lobby() {
     const [totalRounds, setTotalRounds] = useState(0);
     const [allTracks, setAllTracks] = useState([]);
     const [revealAnswerState, setRevealAnswerState] = useState(false);
+    const [options, setOptions] = useState([]);
+
 
     useEffect(() => {
         if (!roomId) return;
@@ -59,6 +61,7 @@ function Lobby() {
                     setAllTracks(roomState.songs);
                     setGameState(roomState.gameState);
                     setRevealAnswerState(roomState.revealAnswerState)
+                    setOptions(roomState.options);
                 });
 
                 client.publish({
@@ -143,6 +146,7 @@ function Lobby() {
                 allTracks={allTracks}
                 players={players}
                 revealAnswerState={revealAnswerState}
+                options={options}
             />
         );
     }

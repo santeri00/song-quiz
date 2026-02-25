@@ -1,7 +1,8 @@
 import React from "react";
 import Navbar from "../../components/Navbar";
+import EndNavbar from "./EndNavBar";
 import { CircleCheck, CircleX } from "lucide-react";
-
+import ScoreBoard from "./ScoreBoard";
 export default function MultiEndState({ players, user }) {
 
   const data = players.find(p => p.nickname === user);
@@ -10,14 +11,19 @@ export default function MultiEndState({ players, user }) {
   console.log("HISTORY DATA:", history);
   return (
     <section className="grid gap-5">
-      <Navbar />
+      <EndNavbar />
+
 
       <div className="text-center m-5 text-4xl">
         <h2>Total score: {data?.score}</h2>
       </div>
 
-      <div className="flex justify-center">
-        <div className="rounded-sm overflow-hidden w-full max-w-2xl">
+      <div className="flex flex-row justify-center gap-5">
+        <div className="">
+          <ScoreBoard user={user}
+            players={players} />
+        </div>
+        <div className="rounded-sm overflow-hidden w-full max-w-120">
           <table className="w-full opacity-85">
             <thead className="bg-neutral-900">
               <tr>

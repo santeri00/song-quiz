@@ -15,6 +15,7 @@ export default function MultiPlayState({
   allTracks,
   players,
   revealAnswerState,
+  options,
 }) {
   const [currentOptions, setCurrentOptions] = useState([]);
   const [hasAnswered, setHasAnswered] = useState(false);
@@ -23,10 +24,23 @@ export default function MultiPlayState({
 
   const [isReady, setIsReady] = useState(false);
   const [countdown, setCountdown] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(25);
 
   const [selectedTitle, setSelectedTitle] = useState(null);
   const audioRef = useRef(null);
 
+  //timer for player to choose an answer in given time
+  useEffect(() => {
+    if (!isReady || revealAnswerState || hasAnswered) return;
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === 0 && !hasAnswered) {
+      handleAnswerAfterTimeRanOut();
+    }
+  }, [timeLeft, isReady, revealAnswerState, hasAnswered])
+
+  //timer between the rounds, counting down from 3,2,1
   useEffect(() => {
     if (!songs || songs.length === 0) return;
 
@@ -52,16 +66,7 @@ export default function MultiPlayState({
     const correctSong = songs[currentRound - 1];
 
     if (!correctSong) return;
-
-    const wrongOptions = allTracks
-      .filter(track => track.title !== correctSong.title)
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 3);
-
-    const options = [...wrongOptions, correctSong].sort(() => 0.5 - Math.random());
-
     setCurrentOptions(options);
-
     if (audioRef?.current && correctSong.previewUrl) {
       audioRef.current.src = correctSong.previewUrl;
       audioRef.current.play().catch(err => {
@@ -70,14 +75,30 @@ export default function MultiPlayState({
     }
   }, [currentRound, songs, allTracks, totalRounds, clientRef, isReady, currentOptions.length])
 
+  //round reset logic
   useEffect(() => {
     setHasAnswered(false);
     setIsReady(false);
     setCountdown(3);
     setCurrentOptions([]);
     setScoreBoardPlayers(players);
+    setTimeLeft(25);
   }, [currentRound])
 
+  const handleAnswerAfterTimeRanOut = () => {
+    console.log("lol111");
+    setHasAnswered(true);
+    if (clientRef.current) {
+      clientRef.current.publish({
+        destination: `/app/lobby/${roomId}/answer`,
+        body: JSON.stringify({
+          username,
+          score: 0,
+        })
+      })
+
+    }
+  }
   const handleAnswer = (selectedTrack) => {
     if (hasAnswered) return;
 
