@@ -79,7 +79,7 @@ public class LobbyController {
 
     if (room != null) {
       room.setSelectedPlayListId(playList.getArtistId());
-
+      room.setPlayListName(playList.getArtistName());
       log.info("Room {} updated playlist: {}", roomId, playList);
     }
     return room;

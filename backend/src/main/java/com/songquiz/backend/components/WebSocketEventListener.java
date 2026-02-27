@@ -32,6 +32,7 @@ public class WebSocketEventListener {
           gameManagerService.getActiveRooms().remove(room.getRoomId());
           System.out.println("Room " + room.getRoomId() + " deleted (empty).");
         } else {
+          
           messagingTemplate.convertAndSend("/topic/lobby/" + room.getRoomId(), room);
         }
 

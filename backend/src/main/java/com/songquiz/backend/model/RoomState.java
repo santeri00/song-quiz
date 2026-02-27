@@ -6,9 +6,11 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
 @NoArgsConstructor
+@Slf4j
 public class RoomState {
   private String roomId;
   private List<Player> players = new ArrayList<>();
@@ -22,6 +24,7 @@ public class RoomState {
   private int maxPlayerCount = 8;
   private boolean revealAnswerState = false;
   private List<Song> options;
+  private String playListName;
 
   public RoomState(String roomId) {
     this.roomId = roomId;
@@ -56,9 +59,21 @@ public class RoomState {
   }
 
   public boolean removePlayerBySessionId(String sessionId) {
-    if (sessionId == null)
+    if (sessionId == null) {
       return false;
-    return players.removeIf(p -> sessionId.equals(p.getSessionId()));
+    }
+    Player player = players.stream().filter(p -> p.getSessionId().equals(sessionId)).findFirst().orElse(null);
+    if (player == null) {
+      return false;
+    }
+    boolean wasHost = player.isHost();
+    players.remove(player);
+    if (wasHost && !players.isEmpty()) {
+      Player newHost = players.get(0);
+      newHost.setHost(true);
+      log.info("Host changed from {} to {}", player.getNickname(), newHost.getNickname());
+    }
+    return true;
   }
 
   public Player getPlayerByName(String name) {
