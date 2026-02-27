@@ -171,6 +171,18 @@ export default function MultiPlayState({
             ))}
           </div>
 
+          <div className="w-full h-3 bg-neutral-800 rounded-full mt-10 overflow-hidden border border-neutral-700">
+            <div
+              className={`h-full transition-all ease-linear duration-1000 ${timeLeft > 10
+                ? 'bg-teal-500'
+                : timeLeft > 5
+                  ? 'bg-yellow-500'
+                  : 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]' 
+                }`}
+              style={{ width: `${(timeLeft / 25) * 100}%` }}
+            ></div>
+          </div>
+
         </div>
       </div>
     </div>

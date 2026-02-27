@@ -6,12 +6,13 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import SockJs from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
-import { Settings, Clipboard } from 'lucide-react';
+import { Settings, Clipboard, Crown } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import SettingsWindow from '../components/SettingsWindow';
 import PlayListSelector from '../components/PlayListSelector';
 import MultiPlayState from '../components/MultiPlayState';
 import MultiEndState from '../components/MultiEndState';
+import InfoScreen from '../components/InfoScreen';
 
 function Lobby() {
     const { roomId } = useParams();
@@ -30,9 +31,11 @@ function Lobby() {
     const [allTracks, setAllTracks] = useState([]);
     const [revealAnswerState, setRevealAnswerState] = useState(false);
     const [options, setOptions] = useState([]);
+    const [selectedPlaylistName, setSelectedPlayListName] = useState(null);
 
-
+    const isHost = players.find(p => p.nickname === username)?.host || false;
     useEffect(() => {
+
         if (!roomId) return;
         if (clientRef.current) return;
         const hasTicket = sessionStorage.getItem('ticket');
@@ -62,6 +65,7 @@ function Lobby() {
                     setGameState(roomState.gameState);
                     setRevealAnswerState(roomState.revealAnswerState)
                     setOptions(roomState.options);
+                    setSelectedPlayListName(roomState.playListName);
                 });
 
                 client.publish({
@@ -75,7 +79,6 @@ function Lobby() {
         })
         client.activate();
         clientRef.current = client;
-
         return () => {
             if (clientRef.current) {
                 clientRef.current.deactivate();
@@ -121,14 +124,15 @@ function Lobby() {
 
     const playerCard = (player) => {
         return (
-            <div className='p-2 border-1 rounded-md'>
-                {player.nickname === username ? "* " : ""}
+            <div className={`flex justify-between items-center p-2 gap-1.5 rounded ${player.nickname === username ? 'bg-teal-700' : 'bg-neutral-800'}`}>
                 {player.nickname}
-                {player.host && " (Host)"}
+                {player.host && (
+                    <Crown size={20} />
+                )}
             </div>
         )
     }
-
+    console.log("WHO AM I?", username, "AM I HOST?", isHost, "ALL PLAYERS:", players);
     if (!isAuthorized) {
         return null;
     }
@@ -180,11 +184,20 @@ function Lobby() {
                             );
                         }}
                     />
-                    <Settings className=' cursor-pointer' size={36} onClick={() => setIsSettingsOpen(true)} />
+                    {isHost && (
+                        <Settings className=' cursor-pointer' size={36} onClick={() => setIsSettingsOpen(true)} />
+                    )}
+                    <SettingsWindow
+                        isOpen={isSettingsOpen}
+                        onClose={() => setIsSettingsOpen(false)}
+                        handleRoundsChange={handleSettingsUpdate}
+                        rounds={rounds} />
 
 
                 </div>
-                <SettingsWindow isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} handleRoundsChange={handleSettingsUpdate} rounds={rounds} />
+
+
+
                 <div className='flex flex-col'>
                     <div className='flex flex-row items-start gap-5 '>
                         <div className='border-1 rounded-sm p-2 '>
@@ -202,17 +215,27 @@ function Lobby() {
 
                         </div>
 
-                        <div className='border-1 rounded-sm w-full'>
-                            < PlayListSelector selectedPlayList={selectedPlayList} onSelect={handlePlayListSelect} />
+                        <div className='border-1 rounded-sm w-full min-h-50'>
+                            {isHost ? (
+                                < PlayListSelector selectedPlayList={selectedPlayList} onSelect={handlePlayListSelect} />
+                            ) : (
+                                <InfoScreen rounds={rounds} playlist={selectedPlaylistName} />
+                            )}
+
                         </div>
                     </div>
 
                     <div className='flex align-center justify-center mt-10'>
-                        <button className='bg-neutral-800 text-white px-4 py-2 m-2 rounded-md cursor-pointer hover:text-teal-500 w-100'
-                            disabled={!selectedPlayList}
-                            onClick={startGame}>
-                            start game
-                        </button>
+                        {
+                            isHost && (
+                                <button className='bg-neutral-900 text-white px-4 py-2 m-2 rounded-md cursor-pointer hover:text-teal-500 w-100'
+                                    disabled={!selectedPlayList}
+                                    onClick={startGame}>
+                                    start game
+                                </button>
+                            )
+                        }
+
                     </div>
 
                 </div>
