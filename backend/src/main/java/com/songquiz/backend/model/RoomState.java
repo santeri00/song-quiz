@@ -25,7 +25,7 @@ public class RoomState {
   private boolean revealAnswerState = false;
   private List<Song> options;
   private String playListName;
-
+  private int answerPlacement = 0;
   public RoomState(String roomId) {
     this.roomId = roomId;
     this.gameState = GameStatus.LOBBY;

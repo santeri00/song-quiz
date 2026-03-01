@@ -96,16 +96,31 @@ public class LobbyController {
     Player player = room.getPlayerByName(ans.getUsername());
 
     if (player != null) {
+      double score = ans.getScore();
 
-      player.updateScore(ans.getScore());
-      boolean isCorrect = ans.getScore() > 0;
+      boolean isCorrect = score > 0;
+      int extraPoints;
       player.getAnswerHistory()
           .add(new AnswerStatus(isCorrect, room.getCurrentRoundSongs().get(room.getCurrentRound() - 1)));
-      log.info("Player {} in room {} answered: {}, score: {}", player.getNickname(), roomId, ans.getScore(),
+      if (isCorrect) {
+        score = 10;
+        // add extra points based on answer time
+        if (room.getAnswerPlacement() < 3) {
+          int placement = room.getAnswerPlacement();
+          extraPoints = 3 - placement;
+          score += extraPoints;
+
+        }
+        room.setAnswerPlacement(room.getAnswerPlacement() + 1);
+      }
+      player.updateScore(score);
+      log.info("Player {} in room {} answered: {}, score: {}", player.getNickname(), roomId, score,
           player.getScore());
+
       player.setHasAnswered(true);
     }
     boolean isReady = room.getPlayers().stream().allMatch(Player::isHasAnswered);
+
     if (isReady) {
       room.setRevealAnswerState(true);
 
@@ -115,7 +130,9 @@ public class LobbyController {
           room.setRevealAnswerState(false);
           room.setCurrentRound(room.getCurrentRound() + 1);
           room.getPlayers().forEach(p -> p.setHasAnswered(false));
+          room.setAnswerPlacement(0);
           log.info("All players in room {} have answered. Moving to round {}", roomId, room.getCurrentRound());
+
           if (room.getCurrentRound() > room.getTotalRounds()) {
             room.setGameState(GameStatus.FINISHED);
           } else {
