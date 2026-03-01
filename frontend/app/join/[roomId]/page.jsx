@@ -9,6 +9,8 @@ export default function JoinPage() {
   const router = useRouter();
   const [isValid, setIsValid] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [userNameInput, setUserNameInput] = useState("");
+
   useEffect(() => {
     if (!roomId) return;
     const validateRoom = async () => {
@@ -48,6 +50,7 @@ export default function JoinPage() {
 
   const handleJoin = () => {
     sessionStorage.setItem('ticket', 'valid');
+    sessionStorage.setItem('username', userNameInput);
     router.push(`/lobby/${roomId}`);
   }
 
@@ -64,6 +67,17 @@ export default function JoinPage() {
   return (
     <div className="flex flex-col h-screen items-center justify-center bg-neutral-900 text-white">
       <h1 className="text-2xl ">Room{roomId}</h1>
+      <label htmlFor="nickname" className='text-lg mt-5'>
+        <input
+          type="text"
+          id='nickname'
+          maxLength={10}
+          placeholder='name'
+          value={userNameInput}
+          onChange={(e) => setUserNameInput(e.target.value)}
+          className='p-3 bg-neutral-700 rounded-md focus:border focus:border-teal-500 focus:outline-none '
+        />
+      </label>
       <button
         onClick={handleJoin}
         className="flex-row hover:text-teal-500 transition ease-in-out duration-200 cursor-pointer

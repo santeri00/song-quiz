@@ -36,7 +36,10 @@ export default function MultiPlayState({
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     } else if (timeLeft === 0 && !hasAnswered) {
-      handleAnswerAfterTimeRanOut();
+      const lastSecAnimation = setTimeout(() => {
+        handleAnswerAfterTimeRanOut();
+      }, 1000)
+      return () => clearTimeout(lastSecAnimation);
     }
   }, [timeLeft, isReady, revealAnswerState, hasAnswered])
 
@@ -177,7 +180,7 @@ export default function MultiPlayState({
                 ? 'bg-teal-500'
                 : timeLeft > 5
                   ? 'bg-yellow-500'
-                  : 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]' 
+                  : 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]'
                 }`}
               style={{ width: `${(timeLeft / 25) * 100}%` }}
             ></div>

@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import Navbar from "./components/Navbar";
 import { Play } from 'lucide-react';
 import { useState } from "react";
+import LobbyCreateScreen from './lobby/components/LobbyCreateScreen';
 
 export default function Home() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function Home() {
   const [isScaled, setIsScaled] = useState(false);
   const [isScaled2, setIsScaled2] = useState(false);
 
+  const [showLobbyCreateScreen, setShowLobbyCreateScreen] = useState(false);
   //
   const createLobby = async () => {
     try {
@@ -54,20 +56,29 @@ export default function Home() {
 
   }
 
+  if (showLobbyCreateScreen) {
+    return (
+      <div>
+        <Navbar />
+        <LobbyCreateScreen startGame={createLobby} />
+      </div>
+
+    )
+  }
 
   return (
-    <main className="">
+    <main className="text-2xl">
       <Navbar />
       <section className="flex flex-col p-4 items-center justify-center">
         <h1 className="text-2xl">Welcome to Song quiz!</h1>
-        <p className="opacity-60 text-center max-w-lg">Press play to create a lobby where you can challenge your friends or yourself trying to guess the song name or artist!</p>
-        <div className="flex flex-row gap-5">
+        <p className="opacity-60 text-center max-w-lg">Press play to create a lobby where you can challenge your friends or yourself trying to guess the song name</p>
+        <div className="flex flex-row gap-5 mt-15">
           <button
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            className={`flex-row hover:text-teal-500 transition ease-in-out duration-200 cursor-pointer bg-neutral-900 border-1 rounded-sm w-60 h-70 items-center justify-center flex mt-10  ${isScaled ? 'scale-105' : 'scale-100'} `}
-            onClick={createLobby}
+            className={`flex-row hover:text-teal-500 transition ease-in-out duration-200 cursor-pointer bg-neutral-900 border-1 rounded-sm w-80 h-90 items-center justify-center flex mt-10  ${isScaled ? 'scale-105' : 'scale-100'} `}
+            onClick={() => setShowLobbyCreateScreen(true)}
           >
 
             Play <Play className="" />
@@ -78,7 +89,7 @@ export default function Home() {
             onMouseUp={() => handleMouseUp(2)}
             onMouseLeave={() => handleMouseUp(2)}
             onClick={() => router.push('/Quickplay')}
-            className={`flex-row hover:text-teal-500 transition ease-in-out duration-200 cursor-pointer bg-neutral-900 border-1 rounded-sm w-60 h-70 items-center justify-center flex mt-10  ${isScaled2 ? 'scale-105' : 'scale-100'} `}>
+            className={`flex-row hover:text-teal-500 transition ease-in-out duration-200 cursor-pointer bg-neutral-900 border-1 rounded-sm w-80 h-90 items-center justify-center flex mt-10  ${isScaled2 ? 'scale-105' : 'scale-100'} `}>
             Quickplay <Play className="" />
           </button>
         </div>

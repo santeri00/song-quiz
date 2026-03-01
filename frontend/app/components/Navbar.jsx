@@ -5,7 +5,7 @@ import { PlusCircle } from 'lucide-react';
 
 function Navbar() {
   return (
-    <nav className='p-2 w-screen flex flex-row items-center gap-x-15 border-b border-teal-900'>
+    <nav className='p-4 w-screen flex flex-row items-center gap-x-15 border-b border-teal-900'>
       <Link href="/">
         <Image
           src="/songquizLogo.png"

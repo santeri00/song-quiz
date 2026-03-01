@@ -17,7 +17,12 @@ import InfoScreen from '../components/InfoScreen';
 function Lobby() {
     const { roomId } = useParams();
     const [players, setPlayers] = useState([]);
-    const [username, setUsername] = useState("Player" + Math.floor(Math.random() * 1000));
+    const [username, setUsername] = useState(() => {
+        if (typeof window !== "undefined") {
+            return sessionStorage.getItem("username") || "Player" + Math.floor(Math.random() * 1000);
+        }
+        return "Player";
+    });
     const router = useRouter();
     const clientRef = useRef(null);
     const [isAuthorized, setIsAuthorized] = useState(false);
@@ -46,7 +51,9 @@ function Lobby() {
         setIsAuthorized(true);
         setTimeout(() => {
             sessionStorage.removeItem('ticket');
-        }, 1000);
+        }, 0)
+
+
 
         const socket = new SockJs('http://localhost:5000/ws-game');
         const client = new Client({
@@ -124,7 +131,7 @@ function Lobby() {
 
     const playerCard = (player) => {
         return (
-            <div className={`flex justify-between items-center p-2 gap-1.5 rounded ${player.nickname === username ? 'bg-teal-700' : 'bg-neutral-800'}`}>
+            <div className={`flex justify-between items-center overflow-hidden p-2 gap-1.5 rounded text-xl ${player.nickname === username ? 'bg-teal-700' : 'bg-neutral-800'}`}>
                 {player.nickname}
                 {player.host && (
                     <Crown size={20} />
@@ -132,7 +139,7 @@ function Lobby() {
             </div>
         )
     }
-    console.log("WHO AM I?", username, "AM I HOST?", isHost, "ALL PLAYERS:", players);
+
     if (!isAuthorized) {
         return null;
     }
@@ -167,7 +174,7 @@ function Lobby() {
         <div>
             <Toaster />
             <Navbar />
-            <section className='flex justify-center flex-col gap-5 w-7/10 mx-auto'>
+            <section className='flex justify-center flex-col gap-5 w-7/10 mx-auto text-xl'>
                 <h1 className='mt-5'>Room ID: {roomId}</h1>
                 <div className='mt-5 bg-neutral-900 p-8 rounded-md flex flex-row items-center gap-4'>
                     <p>Players: {players.length}/8</p>
@@ -198,9 +205,9 @@ function Lobby() {
 
 
 
-                <div className='flex flex-col'>
+                <div className='flex flex-col '>
                     <div className='flex flex-row items-start gap-5 '>
-                        <div className='border-1 rounded-sm p-2 '>
+                        <div className='border-1 rounded-sm p-2 w-1/5'>
                             {players.length > 0 ? (
                                 <ul>
                                     {players.map((player, index) => (
@@ -228,7 +235,7 @@ function Lobby() {
                     <div className='flex align-center justify-center mt-10'>
                         {
                             isHost && (
-                                <button className='bg-neutral-900 text-white px-4 py-2 m-2 rounded-md cursor-pointer hover:text-teal-500 w-100'
+                                <button className='bg-neutral-900 text-white px-8 text-xl py-5 m-2 rounded-md cursor-pointer hover:text-teal-500 w-100'
                                     disabled={!selectedPlayList}
                                     onClick={startGame}>
                                     start game

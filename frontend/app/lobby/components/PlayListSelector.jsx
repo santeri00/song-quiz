@@ -22,8 +22,8 @@ export default function PlayListSelector({ selectedPlayList, onSelect }) {
   }
   return (
     <>
-      <div className="p-2">
-        <h2 className="text-lg font-bold m-4 text-left">Select a playlist</h2>
+      <div className="p-6 text-xl">
+        <h2 className="text-3xl font-bold m-4 text-left">Select a playlist</h2>
 
         <div>
           {GENRES.map(genre => (
@@ -38,7 +38,7 @@ export default function PlayListSelector({ selectedPlayList, onSelect }) {
           ))}
         </div>
 
-        <div className="flex flex-row">
+        <div className="flex flex-row gap-5">
           {filteredPlayList.map(artist => (
             <div
               key={artist.id}
@@ -46,8 +46,8 @@ export default function PlayListSelector({ selectedPlayList, onSelect }) {
                 ${selectedPlayList === artist.id ? "text-teal-500" : ""}`}
               onClick={() => onSelect(artist.id, artist.name)}
             >
-              <img className={`rounded-full w-24 h-24 ${selectedPlayList === artist.id ? "border-2 border-teal-500" : ""}`} src="https://cdn-images.dzcdn.net/images/artist/bb76c2ee3b068726ab4c37b0aabdb57a/56x56-000000-80-0-0.jpg" alt="" />
-              <span className="text-lg">{artist.name}</span>
+              <img className={`rounded-full w-28 h-28 ${selectedPlayList === artist.id ? "border-2 border-teal-500" : ""}`} src="https://cdn-images.dzcdn.net/images/artist/bb76c2ee3b068726ab4c37b0aabdb57a/56x56-000000-80-0-0.jpg" alt="" />
+              <span className="text-xl">{artist.name}</span>
             </div>
 
           ))}
