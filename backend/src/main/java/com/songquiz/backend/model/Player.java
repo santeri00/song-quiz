@@ -9,16 +9,17 @@ import lombok.Data;
 public class Player {
   private String sessionId;
   private String nickname;
-  private double score = 0.0;
+  private int score = 0;
   private boolean isHost;
   private boolean guessIsCorrect;
   private boolean hasAnswered;
   private List<AnswerStatus> answerHistory = new ArrayList<>();
+  private int scoreThisRound = 0;
 
   public Player(String sessionId, String nickname) {
     this.sessionId = sessionId;
     this.nickname = nickname;
-    this.score = 0.0;
+    this.score = 0;
     this.isHost = false;
     this.guessIsCorrect = false;
     this.hasAnswered = false;
@@ -33,7 +34,7 @@ public class Player {
   }
 
   public void resetForNewGame() {
-    this.score = 0.0;
+    this.score = 0;
     this.guessIsCorrect = false;
   }
 

@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class AnswerMsgDto {
   private String username;
-  private double score;
+  private int score;
 }
