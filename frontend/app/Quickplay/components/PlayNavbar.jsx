@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function PlayNavbar({ currentTrackIndex, rounds }) {
 
   return (
-    <nav className='relative p-2 w-screen flex flex-row items-center gap-x-15 border-b border-teal-900'>
+    <nav className='relative p-4 w-screen flex flex-row items-center gap-x-15 border-b border-teal-900'>
       <div>
         <Link href="/">
           <Image

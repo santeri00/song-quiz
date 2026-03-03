@@ -59,7 +59,6 @@ function Lobby() {
         const client = new Client({
             webSocketFactory: () => socket,
             onConnect: () => {
-                console.log("Connected to WebSocket");
                 client.subscribe(`/topic/lobby/${roomId}`, (message) => {
                     const roomState = JSON.parse(message.body);
                     setPlayers(roomState.players);
@@ -90,7 +89,6 @@ function Lobby() {
             if (clientRef.current) {
                 clientRef.current.deactivate();
                 clientRef.current = null;
-                console.log("Disconnected from WebSocket " + roomId);
             }
         };
     }, [roomId, router, username]);
@@ -123,7 +121,6 @@ function Lobby() {
                 body: JSON.stringify({}),
             })
             setGameState("PLAYING");
-            console.log("game start");
         }
     }
 

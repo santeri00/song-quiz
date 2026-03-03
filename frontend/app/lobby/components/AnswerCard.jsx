@@ -3,7 +3,6 @@ import React from "react";
 export default function AnswerCard({ title, isAnswer, hasAnswered, onClick, revealAnswerState, isSelected }) {
 
   const checkAnswer = () => {
-    isAnswer ? console.log("correct") : console.log("not correct")
     onClick();
   }
 

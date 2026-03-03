@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Trophy, Medal } from 'lucide-react';
-export default function ScoreBoard({ players, user }) {
+export default function ScoreBoard({ players, user, revealAnswerState }) {
 
   players.sort((a, b) => b.score - a.score);
   return (
@@ -15,7 +15,18 @@ export default function ScoreBoard({ players, user }) {
           <div key={index} className={`flex justify-between items-center p-2 rounded ${player.nickname === user ? 'bg-teal-700' : 'bg-neutral-800'}`}>
             <span>{player.nickname}</span>
             <span className="font-bold">{player.score}</span>
+
+            <span className={`text-lg font-bold transition-all absolute  flex items-center ease-out
+                ${revealAnswerState ? "-right-7 ml-4 opacity-100" : "right-0 opacity-0"}
+                ${player.scoreThisRound > 0 ? 'text-green-500' : 'text-red-500 '
+              }`}>
+              +{player.scoreThisRound}
+            </span>
+
           </div>
+
+
+
         ))}
       </div>
     </div>

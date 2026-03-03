@@ -64,7 +64,6 @@ export default function MultiPlayState({
     if (allTracks.length === 0) return;
     if (!isReady) return;
     if (currentOptions.length > 0) return;
-    console.log("idkk");
     setHasAnswered(false);
     const correctSong = songs[currentRound - 1];
 
@@ -88,8 +87,11 @@ export default function MultiPlayState({
     setTimeLeft(25);
   }, [currentRound])
 
+  useEffect(() => {
+    setScoreBoardPlayers(players);
+  }, [revealAnswerState])
+
   const handleAnswerAfterTimeRanOut = () => {
-    console.log("lol111");
     setHasAnswered(true);
     if (clientRef.current) {
       clientRef.current.publish({
@@ -151,7 +153,7 @@ export default function MultiPlayState({
       <PlayNavbar currentTrackIndex={currentRound} rounds={totalRounds} />
       <div className="absolute top-1/3 left-6">
         {
-          showScoreBoard && <ScoreBoard players={ScoreBoardPlayers} user={username} />
+          showScoreBoard && <ScoreBoard players={ScoreBoardPlayers} user={username} revealAnswerState={revealAnswerState} />
         }
       </div>
 

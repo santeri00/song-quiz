@@ -4,8 +4,6 @@ import Navbar from "../../components/Navbar";
 export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setSelectedAlbumsIds,
   currentSongUrl, audioRef, getTracksFromSelectedAlbums, pauseAudio, handleStartGame, singles }) {
 
-  console.log("albums", albums);
-  console.log("singles", singles);
 
   return (
     <div className=''>

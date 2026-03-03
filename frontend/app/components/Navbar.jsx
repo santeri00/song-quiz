@@ -3,21 +3,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { PlusCircle } from 'lucide-react';
 
-function Navbar() {
+function Navbar({ click }) {
   return (
     <nav className='p-4 w-screen flex flex-row items-center gap-x-15 border-b border-teal-900'>
-      <Link href="/">
+      <Link href="/" >
         <Image
           src="/songquizLogo.png"
           alt='Logo'
           width={70}
           height={70}
+          onClick={click}
         />
       </Link>
-
-
-
-
     </nav >
   )
 }

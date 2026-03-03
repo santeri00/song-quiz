@@ -23,7 +23,6 @@ export default function Home() {
         body: JSON.stringify({}),
       });
       const data = await response.text();
-      console.log('Lobby created:', data);
       sessionStorage.setItem('ticket', 'valid');
       router.push(`/lobby/${data}`);
     } catch (error) {
@@ -59,7 +58,7 @@ export default function Home() {
   if (showLobbyCreateScreen) {
     return (
       <div>
-        <Navbar />
+        <Navbar click={() => setShowLobbyCreateScreen(false)} />
         <LobbyCreateScreen startGame={createLobby} />
       </div>
 

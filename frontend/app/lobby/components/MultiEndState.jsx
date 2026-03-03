@@ -8,7 +8,6 @@ export default function MultiEndState({ players, user }) {
   const data = players.find(p => p.nickname === user);
   const history = data?.answerHistory || [];
 
-  console.log("HISTORY DATA:", history);
   return (
     <section className="grid gap-5">
       <EndNavbar />

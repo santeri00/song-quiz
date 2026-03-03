@@ -4,7 +4,7 @@ import Image from "next/image";
 
 function EndNavbar() {
   return (
-    <nav className='p-2 w-full flex flex-row items-center justify-between border-b border-teal-900'>
+    <nav className='p-4 w-full flex flex-row items-center justify-between border-b border-teal-900'>
       <div className=''>
         <Link href="/">
           <Image
