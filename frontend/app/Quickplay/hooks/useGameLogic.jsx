@@ -42,7 +42,7 @@ export function useGameLogic() {
   const fetchAlbums = async () => {
     try {
       console.log("Fetching albums...")
-      const res = await fetch(`http://localhost:5000/api/deezer/artist/${ARTIST_ID_TEST}/albums`)
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deezer/artist/${ARTIST_ID_TEST}/albums`)
       const data = await res.json()
       console.log("data:", data)
       const albumData = data.data
