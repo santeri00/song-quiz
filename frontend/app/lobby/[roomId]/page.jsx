@@ -189,7 +189,8 @@ function Lobby() {
                     <p>Players: {players.length}/8</p>
                     <Clipboard className='ml-auto cursor-pointer' size={36}
                         onClick={() => {
-                            navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BACKEND_URL}/join/` + roomId);
+                            const baseUrl = window.location.origin
+                            navigator.clipboard.writeText(`${baseUrl}/join/` + roomId);
                             toast.success("Room link copied",
                                 {
                                     style: {
