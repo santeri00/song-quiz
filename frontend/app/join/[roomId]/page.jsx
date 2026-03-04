@@ -15,7 +15,7 @@ export default function JoinPage() {
     if (!roomId) return;
     const validateRoom = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/lobby/active?roomId=${roomId}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/lobby/active?roomId=${roomId}`);
         if (response.status === 403) {
           setErrorMsg("Room is full");
           toast.error("Room is full", {

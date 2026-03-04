@@ -37,6 +37,7 @@ function Lobby() {
     const [revealAnswerState, setRevealAnswerState] = useState(false);
     const [options, setOptions] = useState([]);
     const [selectedPlaylistName, setSelectedPlayListName] = useState(null);
+    const [isConnected, setIsConnected] = useState(false);
 
     const isHost = players.find(p => p.nickname === username)?.host || false;
     useEffect(() => {
@@ -55,10 +56,11 @@ function Lobby() {
 
 
 
-        const socket = new SockJs('http://localhost:5000/ws-game');
+        const socket = new SockJs(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ws-game`);
         const client = new Client({
             webSocketFactory: () => socket,
             onConnect: () => {
+                setIsConnected(true);
                 client.subscribe(`/topic/lobby/${roomId}`, (message) => {
                     const roomState = JSON.parse(message.body);
                     setPlayers(roomState.players);
@@ -141,6 +143,16 @@ function Lobby() {
         return null;
     }
 
+    if (!isConnected) {
+        return (
+            <div>
+                <Navbar />
+                <div className='flex justify-center items-center h-[70vh] text-xl'>
+                    <p>Connecting to lobby...</p>
+                </div>
+            </div>
+        )
+    }
 
     if (gameState === "PLAYING") {
         return (
@@ -214,7 +226,7 @@ function Lobby() {
                                     ))}
                                 </ul>
                             ) : (
-                                <p>No players in the lobby</p>
+                                <p>Waiting for you to join...</p>
                             )}
 
                         </div>
