@@ -172,7 +172,14 @@ public class WebClientService {
                 List<Song> allSongs = listOfLists.stream()
                     .flatMap(List::stream)
                     .collect(Collectors.toList());
-                Collections.shuffle(allSongs);
+
+                List<Song> uniqueSongs = allSongs.stream()
+                    .collect(
+                        Collectors.toMap(song -> song.getTitle(), song -> song, (existing, replacement) -> existing))
+                    .values()
+                    .stream()
+                    .collect(Collectors.toList());
+                Collections.shuffle(uniqueSongs);
                 return allSongs;
               });
         });
