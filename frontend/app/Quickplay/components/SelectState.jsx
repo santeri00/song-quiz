@@ -50,12 +50,7 @@ export default function SelectState({ albums, selectedAlbumsIds, toggleAll, setS
           Start Game
         </button>
 
-        <button
-          className='cursor-pointer border rounded-sm bg-neutral-800 p-3 hover:text-teal-500 transition ease-in-out duration 150'
-          onClick={getTracksFromSelectedAlbums}
-        >
-          get tracklist
-        </button>
+
 
 
       </div>
