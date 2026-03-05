@@ -65,7 +65,7 @@ export function useGameLogic() {
   const fetchTrackList = async (id) => {
     console.log("fetching with id:", id)
     try {
-      const res = await fetch(`http://localhost:5000/api/deezer/${id}/tracks`)
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deezer/${id}/tracks`)
       const trackdata = await res.json()
       console.log("fetchTrackList: ", trackdata)
       return trackdata
