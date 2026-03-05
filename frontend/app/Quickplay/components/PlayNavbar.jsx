@@ -1,9 +1,9 @@
 import React from 'react'
 import Link from "next/link";
 import Image from "next/image";
-
+import { useRouter} from 'next/navigation'
 export default function PlayNavbar({ currentTrackIndex, rounds }) {
-
+  const router = useRouter();
   return (
     <nav className='relative p-4 w-screen flex flex-row items-center gap-x-15 border-b border-teal-900'>
       <div>
@@ -27,7 +27,9 @@ export default function PlayNavbar({ currentTrackIndex, rounds }) {
       </div>
 
       <div className="ml-auto pr-4 z-20">
-        <button>quit</button>
+        <button onClick={()=>{
+          router.push("/");
+        }}>quit</button>
       </div>
 
     </nav>
