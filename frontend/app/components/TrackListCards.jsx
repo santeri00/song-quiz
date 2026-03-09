@@ -74,7 +74,7 @@ const List = ({ items, selectedIds, onSelect, toggleAll, singles, setSelectedAlb
 
       </div>
       <div className="mt-5 text-white">
-        Selected IDs: {JSON.stringify(selectedIds)}
+
       </div>
     </div>
   )
