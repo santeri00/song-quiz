@@ -5,6 +5,13 @@ const artists = [
   { id: "4495513", name: "Travis Scott", genre: "RAP" },
   { id: "14456487", name: "Juice Wrld", genre: "RAP" },
 
+  { id: "12246", name: "Taylor Swift", genre: "POP" },
+  { id: "4050205", name: "The Weeknd", genre: "POP" },
+  { id: "1562681", name: "Ariana Grande", genre: "POP" },
+
+  { id: "412", name: "Queen", genre: "ROCK" },
+  { id: "115", name: "AC/DC", genre: "ROCK" },
+  { id: "1188", name: "Nirvana", genre: "ROCK" }
 ]
 const GENRES = ["ALL", "ROCK", "POP", "RAP"];
 export default function PlayListSelector({ selectedPlayList, onSelect }) {
