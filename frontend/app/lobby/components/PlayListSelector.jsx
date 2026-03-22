@@ -45,15 +45,15 @@ export default function PlayListSelector({ selectedPlayList, onSelect }) {
           ))}
         </div>
 
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-row gap-5 flex-wrap ">
           {filteredPlayList.map(artist => (
             <div
               key={artist.id}
-              className={`m-2 rounded-md flex flex-col cursor-pointer items-center hover:text-teal-500 text-center
+              className={`w-32 m-2 rounded-md flex flex-col cursor-pointer items-center shrink-0 hover:text-teal-500 text-center
                 ${selectedPlayList === artist.id ? "text-teal-500" : ""}`}
               onClick={() => onSelect(artist.id, artist.name)}
             >
-              <img className={`rounded-full w-28 h-28 ${selectedPlayList === artist.id ? "border-2 border-teal-500" : ""}`} src="https://cdn-images.dzcdn.net/images/artist/bb76c2ee3b068726ab4c37b0aabdb57a/56x56-000000-80-0-0.jpg" alt="" />
+              <img className={`rounded-full object-cover w-28 h-28 ${selectedPlayList === artist.id ? "border-2 border-teal-500" : ""}`} src="https://cdn-images.dzcdn.net/images/artist/bb76c2ee3b068726ab4c37b0aabdb57a/56x56-000000-80-0-0.jpg" alt="" />
               <span className="text-xl">{artist.name}</span>
             </div>
 
